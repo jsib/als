@@ -14,6 +14,20 @@ class Uri
      */
     private static $_instance = null;
     
+    /**
+     * Forbid creating object through 'new' directive to make singleton
+     */
+    private function __construct() {/* ... */}
+
+    /**
+     * Forbid cloning object to make singleton
+     */
+    private function __clone() {/* ... */}
+    
+    /**
+     * Forbid unserialize to make singleton
+     */
+    private function __wakeup() {/* ... */}
     
     /**
      * Parse URI into array
@@ -60,6 +74,12 @@ class Uri
         return self::$_instance;        
     }
     
+    /**
+     * Return path of uri in array
+     * 
+     * @param type $key_number
+     * @return type
+     */
     public static function getPath($key_number = null)
     {
         //Return full path array
@@ -69,5 +89,14 @@ class Uri
         
         //Return string with certain piece of path array
         return self::$uri['path'][$key_number];
+    }
+    
+    public static function getControllerName()
+    {
+        if (self::getPath(0) == FRONT_CONTROLLER) {
+            return self::getPath(1);
+        }
+        
+        return self::getPath(0);
     }
 }
