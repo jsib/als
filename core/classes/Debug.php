@@ -10,8 +10,25 @@ class Debug
      * 
      * @param $input   Any kind of variable
      */
-    public static function dump($input)
+    public static function dump($input, $label = '')
     {
+        if ($label !== '') {
+            echo $label.":<br/>";
+        }
+        
+        //Special condition for boolean values
+        if (is_bool($input)) {
+            switch ($input) {
+                case true:
+                    $input = 'true';
+                    break;
+                case false:
+                    $input = 'false';
+                    break;
+            }
+        }
+        
+        //Show info
         echo "<pre>";
         print_r($input);
         echo "</pre>";

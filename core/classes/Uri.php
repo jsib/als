@@ -34,7 +34,7 @@ class Uri
     */
     public static function parse($uri_str = null)
     {
-        //Define default value for uri string
+        //If parameter is not presented then take uri from client
         if ($uri_str === null) {
             $uri_str = $_SERVER['REQUEST_URI'];
         }
