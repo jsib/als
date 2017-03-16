@@ -77,8 +77,10 @@ class Uri
     /**
      * Return path of uri in array
      * 
-     * @param type $key_number
-     * @return type
+     * @param int $key_number
+     * 
+     * @return mixed Return string with piece of uri path.
+     *    Or false if this uri piece was not found.
      */
     public static function getPath($key_number = null)
     {
@@ -88,7 +90,13 @@ class Uri
         }
         
         //Return string with certain piece of path array
-        return self::$uri['path'][$key_number];
+        if (isset(self::$uri['path'][$key_number])) {
+            return self::$uri['path'][$key_number];
+        }
+        
+        //No element in uri array with this key was found
+        return false;
+        
     }
     
     public static function getControllerName()

@@ -19,12 +19,18 @@ require_once('../app/routes.php');
 //Set error handler
 set_error_handler("Debug::handleErrors");
 
-Debug::dump(Route::getAll(), 'Route::getAll()');
+//Build route array with data from routes.php
+Route::go()->build();
 
-Debug::dump(Route::getRelevant(), 'Route::getRelevant()');
+//Start test
+if (Uri::parse()->getPath(0) === 'test') {
+    require_once '../tests/'.Uri::parse()->getPath(1).'/'.Uri::parse()->getPath(2).'.php';
+}
+
+//Debug::dump(Route::build()->findByClientUri(), 'Route::buildArray->findByClientUri()');
 
 //Implement connection to database
-$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
+//$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
 
 //Get controller name and call this controller
 //$controller_name = mb_convert_case(Uri::parse()->getControllerName(),
@@ -44,6 +50,3 @@ $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
 //    Debug::error("Cannot find controller class with name ".$controller_name);
 //}
 
-//Route::getByUri();
-
-Debug::dump(Route::isParam('old}'), 'Route::isParam');

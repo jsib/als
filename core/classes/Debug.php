@@ -13,7 +13,7 @@ class Debug
     public static function dump($input, $label = '')
     {
         if ($label !== '') {
-            echo $label.":<br/>";
+            echo '<h1>'.$label.":</h1><br/>";
         }
         
         //Special condition for boolean values
@@ -77,12 +77,8 @@ class Debug
     {
         $error = 'Debug::handleError' . PHP_EOL;
 
-        if ( !(error_reporting() & $errno) ) {
-                if( ERR_SHOW_NO_REPORTED == false ){
-                        return false;
-                }else{
-                        $error .= 'This error code not set in  error_reporting, that\'s why it also handles by standart PHP error handling mechanism.' . PHP_EOL;
-                }
+        if (!(error_reporting() & $errno)) {
+            $error .= 'This error code not set in  error_reporting, that\'s why it also handles by standart PHP error handling mechanism.' . PHP_EOL;
         }
 
         //Form info about error

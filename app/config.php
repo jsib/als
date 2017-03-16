@@ -36,6 +36,11 @@ const CORE_CLASSES_PATH = '../core/classes/';
 const CONTROLLERS_CLASSES_PATH = '../app/Controllers/';
 
 /**
+ * Define path to tests folder
+ */
+const TESTS_PATH = '../tests/';
+
+/**
  * Define pathes to autoload classes
  */
 
@@ -43,3 +48,4 @@ const AUTOLOAD_CLASSES_PATHES = [CORE_CLASSES_PATH, CONTROLLERS_CLASSES_PATH];
 
 //Encoding of .php, .html, etc source files
 const FILES_ENCODING = 'UTF-8';
+
