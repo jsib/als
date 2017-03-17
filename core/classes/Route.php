@@ -1,4 +1,9 @@
 <?php
+
+namespace Core\Route;
+
+use Core\Facades\Uri;
+
 /* 
  * Provide methods for organizing routing
  */
@@ -17,39 +22,7 @@ class Route
     /**
      * Keep information about all routes resolution to controllers and actions
      */
-    public $routes = array();
-    
-    /**
-     * Keep instance of this class object, needed to make singleton 
-     */
-    private static $_instance = null;
-    
-    /**
-     * Forbid creating object through 'new' directive to make singleton
-     */
-    private function __construct() {/* ... */}
-
-    /**
-     * Forbid cloning object to make singleton
-     */
-    private function __clone() {/* ... */}
-    
-    /**
-     * Forbid unserialize to make singleton
-     */
-    private function __wakeup() {/* ... */}
-    
-    /**
-     * Creates instance of object or get it if instance was created already
-     */
-    public static function go()
-    {
-        if (self::$_instance === null) {
-            self::$_instance = new self;
-        }
-
-        return self::$_instance;
-    }
+    public $routes = [];
     
     /**
      * Add route to routes array
@@ -71,7 +44,7 @@ class Route
             $this->routes[$path]['requirements'] = $requirements;
         }
         
-        return self::$_instance;
+        return $this;
     }
     
     /**
@@ -83,17 +56,14 @@ class Route
     }
     
     /**
-     * Build detailed array with all routes
+     * Build detailed array containing all routes from routes.php
      */
     public function build()
     {
         foreach ($this->routes as $route_uri => $route_array) {
             $this->routes[$route_uri]['path'] = Uri::parse($route_uri)->getPath();
         }
-        
-        return self::$_instance;
     }
-    
     
     /**
      * Uniquily find route by uri from client
@@ -107,12 +77,12 @@ class Route
         $routes = $this->routes;
         
         //Base route was found in uri and routes arrays
-        if ($uri === '/' && isset($routes['/'])) {
-            return '/';
+        if (count($uri) == 0 && isset($routes['/'])) {
+            return ['/' => $routes['/']];
         }
         
         //Base route was found in uri, but there is no such route in routes array
-        if ($uri === '/' && !isset($routes['/'])) {
+        if (count($uri) == 0 && !isset($routes['/'])) {
             return false;
         }
         
@@ -182,7 +152,7 @@ class Route
         $check_result = preg_match('/^'.$requirement.'$/', $uri_piece);
         
         if ($check_result === false) {
-            Debug::error("preg_match error");
+            error("preg_match error");
         }
         
         return (bool) $check_result;
@@ -210,7 +180,7 @@ class Route
         
         //Loop over routes which we still have after comparison of previous
         //piece and find any, which has one of relation declared in
-        //self::ROUTE_URI_RELATIONS
+        //$this->ROUTE_URI_RELATIONS
         foreach ($routes as $route_str => $route) {
             //Extract piece from route with same key as given uri piece has
             $route_piece = $route['path'][$uri_piece_key];
@@ -302,7 +272,7 @@ class Route
      * @return mixed String with name of relation.
      *    False if no relation was found.
      */
-    private function findHighestPriorityRelation($relation_routes)
+    private static function findHighestPriorityRelation($relation_routes)
     {
         //Loop over relations from high priority to low priority.
         //If number of routes for a relation is positive,

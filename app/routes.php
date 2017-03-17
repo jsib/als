@@ -1,10 +1,13 @@
 <?php
 
+use Core\Facades\Route;
+
 /**
  * This file defines routes to controllers
  */
-Route::go()->add('/blog', 'Blog:list');
-Route::go()->add('/blog/{post}', 'Blog:post', ['post' => '\d+']);
-Route::go()->add('/blog/{post}/{something}', 'Blog:something', ['post' => '\d+']);
-Route::go()->add('/blog/show', 'Blog:show');
-Route::go()->add('/blog/{slug}', 'Blog:slug');
+Route::add('/', 'Blog:list');
+Route::add('/blog', 'Blog:list');
+Route::add('/blog/{post}', 'Blog:post', ['post' => '\d+']);
+Route::add('/blog/{post}/{something}', 'Blog:something', ['post' => '\d+']);
+Route::add('/blog/show', 'Blog:show');
+Route::add('/blog/{slug}', 'Blog:slug');

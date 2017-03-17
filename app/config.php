@@ -20,11 +20,6 @@ const DB_PASSWORD = '';
 const DB_DATABASE = 'myblog';
 
 /**
- * Front controller name
- */
-const FRONT_CONTROLLER = 'app.php';
-
-/**
  * Define path to core classes
  */
 const CORE_CLASSES_PATH = '../core/classes/';
@@ -43,7 +38,6 @@ const TESTS_PATH = '../tests/';
 /**
  * Define pathes to autoload classes
  */
-
 const AUTOLOAD_CLASSES_PATHES = [CORE_CLASSES_PATH, CONTROLLERS_CLASSES_PATH];
 
 //Encoding of .php, .html, etc source files

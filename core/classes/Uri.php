@@ -1,4 +1,7 @@
 <?php
+
+namespace Core\Uri;
+
 /* 
  * Realize methods for working with URIs: parse, etc
  */
@@ -7,32 +10,12 @@ class Uri
     /**
      * URI transormed to array
      */
-    public static $uri;
-    
-    /**
-     * Keep instance of this class object, needed to make singleton 
-     */
-    private static $_instance = null;
-    
-    /**
-     * Forbid creating object through 'new' directive to make singleton
-     */
-    private function __construct() {/* ... */}
-
-    /**
-     * Forbid cloning object to make singleton
-     */
-    private function __clone() {/* ... */}
-    
-    /**
-     * Forbid unserialize to make singleton
-     */
-    private function __wakeup() {/* ... */}
+    public $uri = [];
     
     /**
      * Parse URI into array
     */
-    public static function parse($uri_str = null)
+    public function parse($uri_str = null)
     {
         //If parameter is not presented then take uri from client
         if ($uri_str === null) {
@@ -65,13 +48,9 @@ class Uri
         $path = array_values($path);
         
         //Pass result
-        self::$uri = ['path' => $path];
+        $this->uri = ['path' => $path];
         
-        if (self::$_instance === null) {
-            self::$_instance = new self;
-        }
-
-        return self::$_instance;        
+        return $this;        
     }
     
     /**
@@ -82,29 +61,20 @@ class Uri
      * @return mixed Return string with piece of uri path.
      *    Or false if this uri piece was not found.
      */
-    public static function getPath($key_number = null)
+    public function getPath($key_number = null)
     {
         //Return full path array
         if ($key_number === null) {
-            return self::$uri['path'];
+            return $this->uri['path'];
         }
         
         //Return string with certain piece of path array
-        if (isset(self::$uri['path'][$key_number])) {
-            return self::$uri['path'][$key_number];
+        if (isset($this->uri['path'][$key_number])) {
+            return $this->uri['path'][$key_number];
         }
         
         //No element in uri array with this key was found
         return false;
         
-    }
-    
-    public static function getControllerName()
-    {
-        if (self::getPath(0) == FRONT_CONTROLLER) {
-            return self::getPath(1);
-        }
-        
-        return self::getPath(0);
     }
 }
