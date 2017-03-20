@@ -23,5 +23,5 @@ function error()
  */
 function view()
 {
-    return call_user_func_array(array('View', 'load'), func_get_args());
+    return call_user_func_array(array('\Core\Facades\View', 'load'), func_get_args());
 }

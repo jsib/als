@@ -347,7 +347,7 @@ class Route
         }
 
         //Run controller
-        call_user_func(array($controller, $action_name));        
+        return call_user_func(array($controller, $action_name));        
     }
     
     /**

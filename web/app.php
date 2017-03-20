@@ -20,7 +20,7 @@ require_once('../app/routes.php');
 require_once('../core/shortcuts.php');
 
 //Set error handler
-set_error_handler("Debug::handleErrors");
+set_error_handler(array('\Core\Debug\Debug', 'handleErrors'));
 
 //Create instance of Route class object and
 //build route array with data from routes.php
@@ -29,9 +29,5 @@ Route::build();
 //Start test if any presented
 Route::startTest();
 
-//Create instance of Database class object and
-//implement connection to database
-//DB::conn();
-
-//Start controller action
-Route::startController();
+//Start controller action, return HTML flow as a result
+echo Route::startController();

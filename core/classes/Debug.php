@@ -1,10 +1,37 @@
 <?php
 
+namespace Core\Debug;
+
 /* 
  * Provide methods for debugging and error reporting
  */
 class Debug
 {
+    /**
+     * Store debug_backtrace() prepared array
+     */
+    private static $debug = [];
+    
+    /*
+     * Store error number
+     */
+    private static $errno;
+    
+    /**
+     * Store error file
+     */
+    private static $errfile;
+    
+    /**
+     * Store error line number
+     */
+    private static $errline;
+    
+    /**
+     * Means, that this error code not set in  error_reporting
+     */
+    private static $errno_uknown = false;    
+    
     /**
      * Show detailed information about given variable
      * 
@@ -35,33 +62,42 @@ class Debug
     }
     
     /**
-     * Process error
+     * Show error message and stop script
      */
-    public static function error($text, $type = E_ERROR)
-    {
-        //Show error text and debug_backtrace information
-        self::show($text);
+    public static function error(
+        $error,
+        $errno = false,
+        $errfile = false,
+        $errline = false,
+        $errno_uknown = false
+    ){
+        //Start showing debug_backtrace() information
+        $debug = debug_backtrace();
         
-        if ($type == E_ERROR) {
-            exit;
-        }
-    }
+        //Remove Debug::error() entry
+        $debug = self::removeEntry($debug, 0, __CLASS__, 'error');
 
-    /**
-     * Print text of the error and debug backtrace information
-     * 
-     * @param string $error     Full and prepared info of the error in HTML format
-     */
-    public static function show($error)
-    {
-            //Add debugging info to the end of message
-            $error .= PHP_EOL . @print_r(debug_backtrace(), true);
+        //Remove Debug::error() entry
+        $debug = self::removeEntry($debug, 1, __CLASS__, 'handleErrors');
 
-            //Form final HTML
-            echo '<div style="margin: 20px 0; border:1px solid #000; padding:10px; background:#AAA; font-family:Tahoma; z-index:1000;">';
-            echo '<h1 style="font-family:Tahoma; font-size:12pt; font-weight:normal; color:red;">Ошибка</h1>';
-            echo '<pre>' . $error . '</pre>';
-            echo '</div>';
+        //Reindex array
+        self::$debug = array_values($debug);
+
+        //Start catching output
+        ob_start();
+
+        //Execute template
+        require(
+            \Core\View\View::TEMPLATES_PATH.
+            'debug_backtrace/debug_backtrace'
+            .'.html.php'
+        );
+
+        //Echo catched output
+        echo ob_get_clean();
+
+        //Stop script execution
+        exit;
     }
 
     /**
@@ -75,21 +111,40 @@ class Debug
      */
     public static function handleErrors($errno, $errstr, $errfile, $errline)
     {
-        $error = 'Debug::handleError' . PHP_EOL;
-
         if (!(error_reporting() & $errno)) {
-            $error .= 'This error code not set in  error_reporting, that\'s why it also handles by standart PHP error handling mechanism.' . PHP_EOL;
+            //Means, that this error code is not set in  error_reporting,
+            //i.e. this error code should be handled by standart PHP
+            //error handling mechanism.
+            $errno_uknown = true;
+        } else {
+            $errno_uknown = false;
         }
-
-        //Form info about error
-        $error .= 'Error code:' . $errno . PHP_EOL;
-        $error .= 'Error description:' . PHP_EOL . $errstr . PHP_EOL;
-        $error .= 'Debugging info:' . PHP_EOL;
-
-        //Show information about error to screen
-        self::error($error);
+        
+        //Show error information and stop script
+        self::error($errstr, $errno, $errfile, $errline, $errno_uknown);
 
         //Don't start standart PHP handling mechanism
         return true;
+    }
+    
+    /**
+     * Remove entry from debug information array
+     * 
+     * @param $debug Array Debug input array
+     * @param $class string Name of entry class
+     * @param $function string Name of entry function
+     * @return Array Debug input array with deleted entries
+     */
+    private static function removeEntry($debug, $key, $class, $function)
+    {
+        //Take appropriate entry from debug array
+        $entry = $debug[$key];
+        
+        //Check entry properties
+        if ($entry['class'] == $class && $entry['function'] == $function) {
+            unset($debug[$key]);
+        }
+        
+        return $debug;
     }
 }

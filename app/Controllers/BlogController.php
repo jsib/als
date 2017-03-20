@@ -17,7 +17,9 @@ class BlogController extends Controller
         
         $menu = DB::fetchAll(MYSQLI_ASSOC);
         
-        echo View::load('blog', ['menu' => $menu]);
+        $name = $name1;
+        
+        return view('blog', ['menu' => $menu]);
         
     }
 }
