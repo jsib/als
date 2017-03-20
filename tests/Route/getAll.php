@@ -1,5 +1,7 @@
 <?php
 
-$routes = Route::go()->getAll();
+use Core\Facades\Route;
 
-Debug::dump($routes, '$routes');
+$routes = Route::getAll();
+
+dump($routes, '$routes');

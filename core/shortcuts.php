@@ -1,5 +1,7 @@
 <?php
 
+use Core\Facades\View;
+
 /**
  * Shortcut for Debug::dump() method
  */
@@ -21,5 +23,5 @@ function error()
  */
 function view()
 {
-    return call_user_func_array(array('Template', 'view'), func_get_args());
+    return call_user_func_array(array('View', 'load'), func_get_args());
 }

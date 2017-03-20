@@ -2,15 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/WebServers/home/myblog.dev/www/tests/uri.php</file>
-            <file>file:/C:/WebServers/home/myblog.dev/www/web/app.php</file>
-            <file>file:/C:/WebServers/home/myblog.dev/www/core/classes/Autoloader.php</file>
-            <file>file:/C:/WebServers/home/myblog.dev/www/app/routes.php</file>
-            <file>file:/C:/WebServers/home/myblog.dev/www/core/classes/Debug.php</file>
-            <file>file:/C:/WebServers/home/myblog.dev/www/core/classes/Uri.php</file>
-            <file>file:/C:/WebServers/home/myblog.dev/www/app/config.php</file>
-            <file>file:/C:/WebServers/home/myblog.dev/www/app/Controllers/PostsController.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

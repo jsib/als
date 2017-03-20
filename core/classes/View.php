@@ -1,6 +1,8 @@
 <?php
 
-class Template
+namespace Core\View;
+
+class View
 {
     /**
      * Define path to templates
@@ -10,7 +12,7 @@ class Template
     /**
      * Store variables which we path to template file
      */
-    public static $data;
+    public $data;
 
     /**
      * If variable $this->name is not found,
@@ -29,15 +31,18 @@ class Template
      * 
      * @return string Processed content of template
      */
-    public static function view($template, $params = [])
+    public function load($template, $params = [])
     {
+        if (count($params) > 0) {
+            $this->data = $params;
+        }
+            
         ob_start();
         require(self::TEMPLATES_PATH.$template.'.html.php');
         return ob_get_clean();
     }
     
-    public function set($name, $value) {
-       // self::data[$name] = $value;
+    public function setVar($name, $value) {
+       $this->data[$name] = $value;
     }
-
 }

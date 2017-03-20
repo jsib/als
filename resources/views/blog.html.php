@@ -3,5 +3,5 @@
 Menu:<br/>
 
 <?php foreach ($this->menu as $item): ?>
-    <h4><?php echo $item ?></h4>
+    <h4><?php echo $item['name'] ?></h4>
 <?php endforeach ?>
