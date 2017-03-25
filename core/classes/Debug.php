@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Debug;
+//namespace Core\Debug;
 
 /* 
  * Provide methods for debugging and error reporting
@@ -74,11 +74,11 @@ class Debug
         //Start showing debug_backtrace() information
         $debug = debug_backtrace();
         
-        //Remove Debug::error() entry
-        $debug = self::removeEntry($debug, 0, __CLASS__, 'error');
+        //Remove __CLASS__::error() entry
+        self::removeEntries($debug, __CLASS__, 'error');
 
-        //Remove Debug::error() entry
-        $debug = self::removeEntry($debug, 1, __CLASS__, 'handleErrors');
+        //Remove __CLASS__::handleErrors() entry
+        self::removeEntries($debug, __CLASS__, 'handleErrors');
 
         //Reindex array
         self::$debug = array_values($debug);
@@ -133,18 +133,21 @@ class Debug
      * @param $debug Array Debug input array
      * @param $class string Name of entry class
      * @param $function string Name of entry function
-     * @return Array Debug input array with deleted entries
+     * @return void
      */
-    private static function removeEntry($debug, $key, $class, $function)
+    private static function removeEntries(&$debug, $class, $function)
     {
-        //Take appropriate entry from debug array
-        $entry = $debug[$key];
-        
-        //Check entry properties
-        if ($entry['class'] == $class && $entry['function'] == $function) {
-            unset($debug[$key]);
+        //Loop over entries
+        foreach ($debug as $key => $entry) {
+            //Check entry properties
+            if (
+                isset($entry['class']) &&
+                isset($entry['function']) && 
+                $entry['class'] == $class &&
+                $entry['function'] == $function
+            ) {
+                unset($debug[$key]);
+            }
         }
-        
-        return $debug;
     }
 }

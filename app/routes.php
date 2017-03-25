@@ -11,3 +11,5 @@ Route::add('/blog/{post}', 'Blog:post', ['post' => '\d+']);
 Route::add('/blog/{post}/{something}', 'Blog:something', ['post' => '\d+']);
 Route::add('/blog/show', 'Blog:show');
 Route::add('/blog/{slug}', 'Blog:slug');
+
+Route::add('/check_login/', 'Login:check');

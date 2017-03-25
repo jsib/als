@@ -7,19 +7,12 @@ class BlogController extends Controller
 {
     public function listAction()
     {
-        echo 'Hello from BlogController:list';
-        
         DB::query('SELECT * FROM `users` ORDER BY `name` ASC');
-        
-//        while ($row = DB::fetchRow()) {
-//            dump($row);
-//        }
         
         $menu = DB::fetchAll(MYSQLI_ASSOC);
         
-        $name = $name1;
-        
-        return view('blog', ['menu' => $menu]);
+        //return view('blog', ['menu' => $menu]);
+        return view('index');
         
     }
 }

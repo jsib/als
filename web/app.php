@@ -20,7 +20,7 @@ require_once('../app/routes.php');
 require_once('../core/shortcuts.php');
 
 //Set error handler
-set_error_handler(array('\Core\Debug\Debug', 'handleErrors'));
+set_error_handler(array('Debug', 'handleErrors'));
 
 //Create instance of Route class object and
 //build route array with data from routes.php
