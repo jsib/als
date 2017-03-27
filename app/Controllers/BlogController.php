@@ -2,6 +2,7 @@
 
 use Core\Facades\DB;
 use Core\Facades\View;
+use Core\Facades\Route;
 
 class BlogController extends Controller
 {
@@ -14,5 +15,10 @@ class BlogController extends Controller
         //return view('blog', ['menu' => $menu]);
         return view('index');
         
+    }
+    
+    public function showPostAction($post)
+    {
+        dump($post);
     }
 }

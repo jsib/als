@@ -7,8 +7,11 @@ use Core\Facades\Route;
  */
 Route::add('/', 'Blog:list');
 Route::add('/blog', 'Blog:list');
-Route::add('/blog/{post}', 'Blog:post', ['post' => '\d+']);
-Route::add('/blog/{post}/{something}', 'Blog:something', ['post' => '\d+']);
+Route::add(
+    '/blog/{post}/',
+    'Blog:showPost',
+    ['post' => '\d+']
+);
 Route::add('/blog/show', 'Blog:show');
 Route::add('/blog/{slug}', 'Blog:slug');
 

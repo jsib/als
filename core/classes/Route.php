@@ -25,6 +25,11 @@ class Route
     public $routes = [];
     
     /**
+     * Route, found by client uri
+     */
+    private $usedRoute = false;
+    
+    /**
      * Add route to routes array
     */
     public function add($path_input, $controller_action_str, $requirements = null)
@@ -70,7 +75,7 @@ class Route
      */
     public function findRouteByClientUri()
     {
-        //Transform uri string from client to array
+        //Transform to array uri string from client 
         $uri = Uri::parse()->getPath();
         
         //Start working with all existing routes
@@ -101,7 +106,9 @@ class Route
             $routes_final = $this->filterRoutesByUriPiece($sized_routes, $uri, $uri_piece_key);
         }
         
+        //Remember route found and to 'usedRoutes' property and return
         if (count($routes_final) > 0) {
+            $this->usedRoute = $routes_final;
             return $routes_final;
         }
         
@@ -109,7 +116,7 @@ class Route
     }
     
     /**
-     * Get param pure route param name
+     * Get route param name without braces
      * 
      * @return  Return param name cleared from braces, and false if param
      * doesn't matches regular expression
@@ -121,6 +128,38 @@ class Route
             return $matches[1];
         }
         
+        return false;
+    }
+    
+    /**
+     * Get all route's parameters values
+     */
+    private function getRouteParamsValues($route_str)
+    {   
+        //Retrieve route array, path
+        $path = $this->routes[$route_str]['path'];
+        
+        //All the route's parameters
+        $params_values = [];
+        
+        //Transform to array uri string from client 
+        $uri = Uri::parse()->getPath();
+        
+        //Look for parameters
+        foreach ($path as $param_key => $param_in_braces) {
+            //Get param name without braces
+            $param = $this->getParam($param_in_braces);
+            
+            if ($param !== false) {
+                $params_values[] = $uri[$param_key];
+            }
+        }
+        
+        //Return found parameters
+        if (count($params_values) > 0) {
+            return $params_values;
+        }
+
         return false;
     }
     
@@ -143,7 +182,7 @@ class Route
         $requirement = $this->getParamRequirement($route_str, $param_name);
         
         if ($requirement === false) {
-            Debug::error(
+            \error(
                 "Requirement for parameter ".$param_name." in route ".
                 $route_str." doesn't exist"
             );
@@ -302,6 +341,8 @@ class Route
     
     /**
      * Starts controller action
+     * 
+     * @return string Html flow as a result of controller execution
      */
     public function startController()
     {
@@ -317,37 +358,38 @@ class Route
             $route_str = key($route_array);
         }
         
+        //Take controller and action name
         $controller_name = $route['controller'].'Controller';
         $action_name = $route['action'].'Action';
 
         //Check for controller file existence
         if (!file_exists(CONTROLLERS_CLASSES_PATH.$controller_name.".php")) {
-            error("Cannot find controller class file ".CONTROLLERS_CLASSES_PATH.$controller_name.".php");
+            \error("Cannot find controller class file ".CONTROLLERS_CLASSES_PATH.$controller_name.".php");
         }
         //
         //Attach controller file
         require_once CONTROLLERS_CLASSES_PATH.$controller_name.".php";
 
-        //
+        //Handle error of unexistent controller name
         if (!class_exists($controller_name)) {
-            error("Controller class with name ".$controller_name." doesn't exist.");
+            \error("Controller class with name ".$controller_name." doesn't exist.");
         }
 
         //Execute controller
         $controller = new $controller_name;
 
         if (!method_exists($controller, $action_name)) {
-            error(
-                "Method ".
-                $action_name.
-                " of controller class ".
-                $controller_name.
-                " doesn't exist."
+            \error(
+                "Method ".$action_name." of controller class ".
+                $controller_name." doesn't exist."
             );
         }
 
+        //Give this values to 
+        $params_values = $this->getRouteParamsValues($route_str);
+        
         //Run controller
-        return call_user_func(array($controller, $action_name));        
+        return $controller->$action_name(...array_values($params_values));
     }
     
     /**

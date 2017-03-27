@@ -2,11 +2,14 @@
 
 use Core\Facades\DB;
 use Core\Facades\View;
+use Core\Facades\Route;
 
 class LoginController extends Controller
 {
     public function checkAction()
     {
+        Route::getRouteParams();
+        
         if (isset($_POST['email']) && isset($_POST['password'])) {
             $email = $_POST['email'];
             $password = $_POST['password'];
@@ -17,11 +20,11 @@ class LoginController extends Controller
             ->exec()
             ->getResult();
         
-        dump(DB::numRows());
+        //dump(DB::numRows());
         
         $table = $result->fetch();
         
-        dump($table);
+        //dump($table);
         
         
         

@@ -65,6 +65,7 @@ class Debug
      * Show error message and stop script
      */
     public static function error(
+        $error,
         $errno = false,
         $errfile = false,
         $errline = false,
