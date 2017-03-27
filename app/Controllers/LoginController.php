@@ -11,10 +11,21 @@ class LoginController extends Controller
             $email = $_POST['email'];
             $password = $_POST['password'];
         }
-        //DB::query('SELECT * FROM `users` ORDER BY `name` ASC');
+        $user = 'myname';
+        $result = DB::prepare('SELECT * FROM `users` WHERE `name` = ?')
+            ->bindParam('s', $user)
+            ->exec()
+            ->getResult();
         
-        //$menu = DB::fetchAll(MYSQLI_ASSOC);
+        dump(DB::numRows());
         
+        $table = $result->fetch();
+        
+        dump($table);
+        
+        
+        
+        exit;
         //return view('blog', ['menu' => $menu]);
         return json_encode([
             'type' => 'error',
@@ -22,4 +33,6 @@ class LoginController extends Controller
         ]);
         
     }
+    
+
 }

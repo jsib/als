@@ -40,6 +40,15 @@ const TESTS_PATH = '../tests/';
  */
 const AUTOLOAD_CLASSES_PATHES = [CORE_CLASSES_PATH, CONTROLLERS_CLASSES_PATH];
 
-//Encoding of .php, .html, etc source files
+/**
+ * Encoding of .php, .html, etc source files
+ */
 const FILES_ENCODING = 'UTF-8';
+
+/**
+ * Next string delimeter for dubugging messages.
+ * For web messages it's usually "<br/>", for CLI "PHP_EOL"
+ */
+const NS_D = "<br/>";
+
 
