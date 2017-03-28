@@ -1,10 +1,11 @@
 <?php
 
+/**
+ * This file describes routes to controllers&actions
+ */
+
 use Core\Facades\Route;
 
-/**
- * This file defines routes to controllers
- */
 Route::add('/', 'Blog:list');
 Route::add('/blog', 'Blog:list');
 Route::add(
@@ -15,4 +16,6 @@ Route::add(
 Route::add('/blog/show', 'Blog:show');
 Route::add('/blog/{slug}', 'Blog:slug');
 
-Route::add('/check_login/', 'Login:check');
+//Sign in and registration
+Route::add('/sign_in/', 'SignIn:form');
+Route::add('/sign_in/check/', 'SignIn:check');

@@ -61,20 +61,28 @@
             var password = $("#inputPassword").val();
 
             $.ajax({
-                url: "/check_login/",
+                url: "/sign_in/check/",
                 type: "POST",
                 dataType: "json",
                 data: {
                     email: email,
                     password: password
                 },
-                success : function(answer){
-                    if (answer.type == 'error') {
-                        //Change answer message
-                        $('#answerText').text(answer.text);
-                        
-                        //Show answer message
-                        $('#submitAnswer').removeClass("hidden");
+                success : function(answer) {
+                    switch (answer.type) {
+                        case 'error':
+                            $('#answerText').text('Invalid email or password');
+                            $('#submitAnswer').removeClass("alert-success");
+                            $('#submitAnswer').addClass("alert-danger");
+                            $('#submitAnswer').removeClass("hidden");
+                            break;
+                        case 'success':
+                            $('#answerText').text('Login success');
+                            $('#submitAnswer').removeClass("alert-danger");
+                            $('#submitAnswer').addClass("alert-success");
+                            $('#submitAnswer').removeClass("hidden");
+                            window.location.replace("/");
+                            break;
                     }
                 }
             });

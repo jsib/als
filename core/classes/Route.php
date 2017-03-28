@@ -388,8 +388,14 @@ class Route
         //Give this values to 
         $params_values = $this->getRouteParamsValues($route_str);
         
+        if ($params_values !== false) {
+            $params_values_transfer = array_values($params_values);
+        } else {
+            $params_values_transfer = [];
+        }
+        
         //Run controller
-        return $controller->$action_name(...array_values($params_values));
+        return $controller->$action_name(...$params_values_transfer);
     }
     
     /**

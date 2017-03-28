@@ -8,17 +8,16 @@ class BlogController extends Controller
 {
     public function listAction()
     {
-        DB::query('SELECT * FROM `users` ORDER BY `name` ASC');
+        //DB::query('SELECT * FROM `users` ORDER BY `name` ASC');
         
-        $menu = DB::fetchAll(MYSQLI_ASSOC);
+        //$menu = DB::fetchAll(MYSQLI_ASSOC);
         
-        //return view('blog', ['menu' => $menu]);
-        return view('index');
+        return view('blog');
         
     }
     
-    public function showPostAction($post)
+    public function showPostAction($post_id)
     {
-        dump($post);
+        dump($post_id);
     }
 }

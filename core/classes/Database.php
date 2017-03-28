@@ -61,10 +61,16 @@ class Database
     /**
      * Fetch a row from result
      */
-    public function fetch($res_type = MYSQLI_ASSOC)
+    public function fetch($column = false)
     {
-        //dump($this->result->num_rows);
-        return $this->result->fetch_array($res_type);
+        switch ($column) {
+            case false:
+                return $this->result->fetch_array();
+                break;
+            default:
+                return $this->result->fetch_array()[$column];
+                break;
+        }
     }
     
     /**
@@ -81,6 +87,14 @@ class Database
     public function insertId()
     {
         return $this->stmt->insert_id;
+    }
+
+    /**
+     * Get number of rows affected by DML statements
+     */
+    public function affectedRows()
+    {
+        return $this->stmt->affected_rows;
     }
     
     /**
@@ -103,10 +117,10 @@ class Database
     /**
      * Bind param to prepared SQL statement
      */
-    public function bindParam($param, $value)
+    public function bindParam($type, $value)
     {
         //Add new binded parameter
-        $this->bindedParams[$param] = $value;
+        $this->bindedParams[] = ['type' => $type, 'value' => $value];
         
         return $this;
     }
@@ -118,20 +132,25 @@ class Database
     {
         //If we have some parameters for binding in SQL statement
         if (count($this->bindedParams) > 0) {
-            $bind_result = $this->stmt->bind_param(
-                implode(array_keys($this->bindedParams)),
-                ...array_values($this->bindedParams)
-            );
-        }
-        
-        //In case of error
-        if ($bind_result === false) {
-            \error(
-                "Cannot bind param to stmt object. Params array:".NS_D.
-                "Stmt error number: ".$this->stmt->errno.NS_D.
-                "Stmt error text: ".$this->stmt->error
-            );
+            $types_str = '';
+            $values = [];
             
+            //Loop over params we need to bind and make maintenance arrays
+            foreach ($this->bindedParams as $param) {
+                $types_str .= $param['type'];
+                $values[] = $param['value'];
+            }
+            
+            $bind_result = $this->stmt->bind_param($types_str, ...$values);
+            
+            //In case of error
+            if ($bind_result === false) {
+                \error(
+                    "Cannot bind param to stmt object. Params array:".NS_D.
+                    "Stmt error number: ".$this->stmt->errno.NS_D.
+                    "Stmt error text: ".$this->stmt->error
+                );
+            }
         }
         
         //Execute SQL statement

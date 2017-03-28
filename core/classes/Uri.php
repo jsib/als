@@ -77,4 +77,12 @@ class Uri
         return false;
         
     }
+    
+    /**
+     * Get full client uri
+     */
+    public function get()
+    {
+        return $_SERVER['REQUEST_URI'];
+    }
 }
