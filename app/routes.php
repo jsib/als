@@ -6,8 +6,8 @@
 
 use Core\Facades\Route;
 
-Route::add('/', 'Blog:list');
-Route::add('/blog', 'Blog:list');
+Route::add('/', 'Blog:listPosts');
+Route::add('/blog/list/', 'Post:list');
 Route::add(
     '/blog/{post}/',
     'Blog:showPost',

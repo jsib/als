@@ -59,7 +59,7 @@ class SignInController extends Controller
         }
         
         //Verify is hash correct
-        return password_verify($password, $hash_res->fetch('hash'));
+        return password_verify($password, $hash_res->fetchColumn('hash'));
     }
     
     /**
@@ -78,7 +78,7 @@ class SignInController extends Controller
         }
         
         //Return user name
-        return $result->fetch('name');
+        return $result->fetchColumn('name');
     }
     
     /**

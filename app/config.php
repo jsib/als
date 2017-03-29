@@ -51,4 +51,9 @@ const FILES_ENCODING = 'UTF-8';
  */
 const NS_D = "<br/>";
 
+/**
+ * Path to dir with assets (like css and js files, etc)
+ */
+const ASSETS_PATH = '/assets/';
+
 

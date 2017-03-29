@@ -6,13 +6,15 @@ use Core\Facades\Route;
 
 class BlogController extends Controller
 {
-    public function listAction()
+    public function listPostsAction()
     {
-        //DB::query('SELECT * FROM `users` ORDER BY `name` ASC');
+        $posts_res = DB::prepare('SELECT * FROM `posts` ORDER BY `created_at` ASC')
+            ->exec()
+            ->getResult();
         
-        //$menu = DB::fetchAll(MYSQLI_ASSOC);
+        $posts = $posts_res->fetchAll();
         
-        return view('blog');
+        return view('blog', ['posts' => $posts]);
         
     }
     

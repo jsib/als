@@ -59,9 +59,17 @@ class Database
     }
     
     /**
-     * Fetch a row from result
+     * Fetch a row
      */
-    public function fetch($column = false)
+    public function fetch($resulttype = MYSQLI_ASSOC)
+    {
+        return $this->result->fetch_array($resulttype);
+    }
+    
+    /**
+     * Fetch a row's column
+     */
+    public function fetchColumn($column = false)
     {
         switch ($column) {
             case false:
@@ -72,6 +80,7 @@ class Database
                 break;
         }
     }
+    
     
     /**
      * Return rows number of executed statement
@@ -156,7 +165,9 @@ class Database
         //Execute SQL statement
         $result = $this->stmt->execute();
         
-        //Store result for correct value of $num_rows, etc
+        //The construction below is commented, becouse now we transfer
+        //mysqli stmt object to mysqli result object.
+        //Uncomment it if you decide to use fetch functions directly with stmt
         //$this->stmt->store_result();
         
         //In error case

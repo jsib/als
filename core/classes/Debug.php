@@ -88,7 +88,7 @@ class Debug
 
         //Execute template
         require(
-            \Core\View\View::TEMPLATES_PATH.
+            \Core\View\View::VIEWS_PATH.
             'debug_backtrace/debug_backtrace'
             .'.html.php'
         );
