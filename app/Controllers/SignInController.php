@@ -8,7 +8,7 @@ class SignInController extends Controller
 {
     public function formAction()
     {
-        return view('index');
+        return view('sign_in');
     }
     
     public function checkAction()
@@ -80,16 +80,4 @@ class SignInController extends Controller
         //Return user name
         return $result->fetchColumn('name');
     }
-    
-    /**
-     * Answer about error
-     */
-    private function sendJsonAnswer($type, $text = '')
-    {
-        return json_encode([
-            'type' => $type,
-            'text' => $text
-        ]);
-    }
-
 }

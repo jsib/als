@@ -7,7 +7,7 @@
 use Core\Facades\Route;
 
 Route::add('/', 'Blog:listPosts');
-Route::add('/blog/list/', 'Post:list');
+Route::add('/blog/posts/load/', 'Blog:loadPosts');
 Route::add(
     '/blog/{post}/',
     'Blog:showPost',
@@ -15,6 +15,7 @@ Route::add(
 );
 Route::add('/blog/show', 'Blog:show');
 Route::add('/blog/{slug}', 'Blog:slug');
+Route::add('/blog/post/add', 'Blog:addPost');
 
 //Sign in and registration
 Route::add('/sign_in/', 'SignIn:form');

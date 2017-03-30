@@ -4,6 +4,7 @@ namespace Core\Auth;
 
 use Core\Facades\Uri;
 use Core\Facades\Route;
+use Core\Facades\DB;
 
 /* 
  * Provide authentication methods
@@ -100,5 +101,23 @@ class Auth
         $this->signInCheckRoute = $route_str; 
     }
     
+    /**
+     * Get user id which is signed in now
+     */
+    public function getSignedInUserId()
+    {
+        $user_name = $_SESSION['user']['name'];
+        
+        $result = DB::prepare("SELECT `id` FROM `users` WHERE `name`=?")
+            ->bindParam('s', $user_name)
+            ->exec()
+            ->getResult();
+        
+        if($result->numRows() == 0) {
+            return false;
+        }
+        
+        return $result->fetchColumn('id');
+    }
     
 }

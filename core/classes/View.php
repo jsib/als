@@ -119,7 +119,11 @@ class View
      */
     public function output($block)
     {
-        echo $this->blocks[$block];
+        if (!isset($this->blocks[$block])) {
+            echo '';
+        } else{
+            echo $this->blocks[$block];
+        }
     }
     
     /**
