@@ -99,6 +99,15 @@ class Debug
         //Stop script execution
         exit;
     }
+    
+    /**
+     * Answer about error to ajax request
+     */
+    public static function ajaxError($error)
+    {
+        echo $error;
+        exit;
+    }
 
     /**
      * Handling appeared errors

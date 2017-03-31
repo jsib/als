@@ -6,13 +6,11 @@ $(document).ready(function() {
         dataType: "json",
         data: {
         },
-        error: function(answer) {
-          alert('Ajax error!');
-          console.log("Ajax error answer:");
-          console.log(answer);
+        error: function(data) {
+            alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
         },
         success : function(data) {
-            console.log("AJAX response success");
+            console.log('AJAX response for "' + this.url + '" success.');
             
             if (data.result == 'success') {
                 posts = data.posts;
@@ -31,11 +29,28 @@ $(document).ready(function() {
     });
 });
 
-$('#addPostForm').on('submit', function(e) {
-    //Cancel standart form submission
-    event.preventDefault();
+$('#addPostForm').validator({
+    disable: true,
+    focus: false,
+    custom: {
+        noempty: function($el) {
+            //Get value of form element
+            value = $el.val();
 
-    //$("#addPostForm").validator();
+            //Make check only, if no processed by 'required' attribute
+            //to prevent second message to be appeared
+            if (value !== '') {
+                if ($.trim(value) === '') {
+                    return 'Поле не должно быть пустым.';
+                }
+            }
+        }
+    }
+}).on('submit', function(event) {
+    //Do nothing if some form checks is invalid
+    if (event.isDefaultPrevented()) {
+       return;
+    }
 
     //Define helper variables
     let title = $("#inputTitle").val();
@@ -51,8 +66,7 @@ $('#addPostForm').on('submit', function(e) {
             text: text
         },
         error: function(data) {
-          alert('AJAX response for ' + this.url + 'error:');
-          console.log(data);
+            alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
         },
         success : function(data) {
             if (data.result == 'success') {

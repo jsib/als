@@ -27,16 +27,20 @@
                             </div>
                             <div class="form-group">
                               <label for="inputTitle">Title</label>
-                              <input type="text" class="form-control" id="inputTitle" placeholder="Title" required>
-                            </div>                       
+                              <input type="text" data-noempty class="form-control" id="inputTitle" placeholder="Title" required>
+                              <div class="help-block with-errors"></div>
+                            </div>
                             <div class="form-group">
                               <label for="inputText">Text</label>
-                              <textarea class="form-control" id="inputText" placeholder="Text" rows="7" required></textarea>
+                              <textarea data-noempty class="form-control" id="inputText" placeholder="Text" rows="7" required></textarea>
+                              <div class="help-block with-errors"></div>
                             </div>                       
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="addButton">Add</button>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
+                                <button type="submit" class="btn btn-primary" id="addButton">Add</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -48,5 +52,6 @@
 
 <?php $this->start('script') ?>
     <script>
+        
     </script>
 <?php $this->stop('script') ?>

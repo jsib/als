@@ -47,8 +47,8 @@ class BlogController extends Controller
         }
         
         //Get post's properties
-        $title = $_POST['title'];
-        $text = $_POST['text'];
+        $title = $this->getData('title');
+        $text = $this->getData('text');
         
         //Get user id which is signed in now
         $user_id = Auth::getSignedInUserId();

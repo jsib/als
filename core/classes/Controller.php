@@ -26,4 +26,15 @@ class Controller
         return json_encode($array);
     }
     
+    /**
+     * Get specified post data or show error
+     */
+    public function getData($name)
+    {
+        if (!isset($_POST[$name])) {
+            \ajax_error('There is no variable "$name" in post array.');
+        }
+        
+        return trim($_POST[$name]);
+    }
 }

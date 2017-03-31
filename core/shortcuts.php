@@ -13,10 +13,19 @@ function dump()
 /**
  * Shortcut for Debug::error() method
  */
-function error()
+function error(...$args)
 {
-    return call_user_func_array(array('Debug', 'error'), func_get_args());
+    return Debug::error(...$args);
 }
+
+/**
+ * Shortcut for Debug::ajaxError() method
+ */
+function ajax_error(...$args)
+{
+    return Debug::ajaxError(...$args);
+}
+
 
 /**
  * Shortcut for Template::view() method
