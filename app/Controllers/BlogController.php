@@ -36,7 +36,22 @@ class BlogController extends Controller
     
     public function showPostAction($post_id)
     {
-        dump($post_id);
+        $posts_res = DB::prepare("
+            SELECT
+                * 
+            FROM
+                `posts`
+            WHERE
+                `id`=$post_id
+
+        ")
+            ->exec()
+            ->getResult();
+        
+        $post = $posts_res->fetch();
+        
+        return $this->sendJson(['result' => 'success', 'post' => $post]);
+        
     }
     
     public function addPostAction()

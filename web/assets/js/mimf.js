@@ -24,10 +24,7 @@ $(document).ready(function() {
                 $.each(posts, function(key, post) {
                   addPostMedia(post);
                 });
-
-                
             }
-
         }
     });
 });
@@ -95,12 +92,11 @@ function addPostMedia(post)
     let $title = $("<h4>" + post.title + "</h4>");
     let $divBody = $("<div class='media-body'></div>");
     let $img = $("<a href=''><img src='#' alt='' class='media-object post-image'></a>");
-    //let $divEdit = "<a class='glyphicon glyphicon-pencil edit-post' href='#' onclick='if(confirm('Edit post'){ editPost(" + post.id + ");return false; }'></a>";
-    let $divRemove = "<a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id +
-        ");return false;'></a>";
+    let $divEdit = "<a class='glyphicon glyphicon-pencil edit-post' href='#' onclick='editPost(" + post.id + ");return false;'></a>"; 
+    let $divRemove = "<a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id + ");return false;'></a>";
     
     //Structure divs
-    //$title.append($divEdit);
+    $title.append($divEdit);
     $title.append($divRemove);
     $divLeft.prepend($img);
     $divBody.prepend($title);
@@ -136,3 +132,82 @@ function removePost(id)
     });
 }
 
+function editPost(post_id)
+{
+    $.ajax({
+        url: "/blog/" + post_id + "/",
+        type: "POST",
+        dataType: "json",
+        data: {
+            id: post_id
+        },
+        error: function(data) {
+            console.log('AJAX response for "' + this.url + '" error:\n' + data.responseText);
+        },
+        success : function(data) {
+            console.log('AJAX response for "' + this.url + '" success:\n');
+            if (data.result == 'success') {
+                post = data.post;
+                console.log(data.post);
+                $('#editPostModal #inputTitle').val(post.title);
+                $('#editPostModal #inputText').val(post.text);
+                $('#editPostModal').modal();
+            }
+        }
+    });
+
+}
+
+$('#editPostForm').validator({
+    disable: true,
+    focus: false,
+    custom: {
+        noempty: function($el) {
+            //Get value of form element
+            value = $el.val();
+
+            //Make check only, if no processed by 'required' attribute
+            //to prevent second message to be appeared
+            if (value !== '') {
+                if ($.trim(value) === '') {
+                    return 'Поле не должно быть пустым.';
+                }
+            }
+        }
+    }
+}).on('submit', function(event) {
+    //Do nothing if some form checks is invalid
+    if (event.isDefaultPrevented()) {
+       return;
+    }
+
+    //Define helper variables
+    let title = $("#inputTitle").val();
+    let text = $("#inputText").val();
+
+    //Let's submit form with ajax!
+    $.ajax({
+        url: "/blog/post/edit",
+        type: "POST",
+        dataType: "json",
+        data: {
+            title: title,
+            text: text
+        },
+        error: function(data) {
+            alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
+        },
+        success : function(data) {
+            if (data.result == 'success') {
+                id = data.id;
+                editPostMedia({title, text, id});
+                $('#editPostModal').modal('hide');
+                $("#inputTitle").val('');
+                $("#inputText").val('');
+            }
+        }
+    });
+
+    //Prevent from scrolling
+    return false;
+});

@@ -46,7 +46,42 @@
                 </div>
             </div>
         </div>        
-        
+        <div id="editPostModal" class="modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form id="editPostForm">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                            <h3 class="modal-title">Edit post</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger hidden" role="alert" id="submitAnswer">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span class="sr-only">Error:</span>
+                                <span id='answerText'></span>
+                            </div>
+                            <div class="form-group">
+                              <label for="inputTitle">Title</label>
+                              <input type="text" data-noempty class="form-control" id="inputTitle" placeholder="Title" required>
+                              <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                              <label for="inputText">Text</label>
+                              <textarea data-noempty class="form-control" id="inputText" placeholder="Text" rows="7" required></textarea>
+                              <div class="help-block with-errors"></div>
+                            </div>                       
+                        </div>
+                        <div class="modal-footer">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
+                                <button type="submit" class="btn btn-primary" id="editButton">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>                
     </div>
 <?php $this->stop('body') ?>
 
