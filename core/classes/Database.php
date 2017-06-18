@@ -30,7 +30,7 @@ class Database
     
     public function __construct()
     {
-        $this->conn = new \mysqli(\DB_HOST, \DB_USER, \DB_PASSWORD, \DB_DATABASE);
+        if (!$this->conn = new \mysqli(\DB_HOST, \DB_USER, \DB_PASSWORD, \DB_DATABASE));
         
     }
 

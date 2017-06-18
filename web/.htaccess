@@ -1,3 +1,7 @@
+#Stop rewriting process for this dir
+RewriteRule ^(myadmin)($|/) - [L]
+
+
 #Replace index file
 DirectoryIndex app.php
 

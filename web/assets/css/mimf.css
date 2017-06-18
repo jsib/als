@@ -2,3 +2,8 @@ img.post-image{
     width:64px;
     height:64px;
 }
+a.edit-post, a.remove-post {
+	padding-left:10px;
+	text-decoration: none;
+}
+

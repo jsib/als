@@ -47,6 +47,10 @@
                     email: email,
                     password: password
                 },
+                error: function(data) {
+                    //alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
+                    console.log('AJAX response for "' + this.url + '" error:\n' + data.responseText);
+                },
                 success : function(answer) {
                     switch (answer.type) {
                         case 'error':

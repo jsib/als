@@ -12,12 +12,12 @@ const DB_USER = 'root';
 /**
  * Database password
  */
-const DB_PASSWORD = '';
+const DB_PASSWORD = 'Gyproc13';
 
 /**
  * Database name
  */
-const DB_DATABASE = 'myblog';
+const DB_DATABASE = 'mimf';
 
 /**
  * Define path to core classes

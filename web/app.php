@@ -38,3 +38,4 @@ Auth::init();
 
 //Start controller action, return HTML flow as a result
 echo Route::startController();
+

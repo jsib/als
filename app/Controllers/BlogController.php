@@ -66,8 +66,37 @@ class BlogController extends Controller
             ->bindParam('s', $title)
             ->bindParam('s', $text)
             ->exec();
+
+        $id = DB::insertId();
         
         //Answer
+        return $this->sendJson(['result' => 'success', 'id' => $id]);
+    }
+
+    public function removePostAction()
+    {
+        //Check all input data to be presented
+        if (!isset($_POST['id'])) {
+            return $this->sendJsonAnswer('error');
+        }
+
+        //Get post's properties
+        $id = $this->getData('id');
+
+        //Query database
+        DB::prepare("
+            DELETE FROM
+                `posts`
+            WHERE
+                `id`=?
+            LIMIT
+                1
+        ")
+            ->bindParam('d', $id)
+            ->exec();
+
+        //Answer
         return $this->sendJson(['result' => 'success']);
+
     }
 }
