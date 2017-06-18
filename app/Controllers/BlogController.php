@@ -88,6 +88,44 @@ class BlogController extends Controller
         return $this->sendJson(['result' => 'success', 'id' => $id]);
     }
 
+    public function editPostAction()
+    {
+        //Check all input data to be presented
+        if (!isset($_POST['id']) || !isset($_POST['title']) || !isset($_POST['text'])) {
+            return $this->sendJsonAnswer('error');
+        }
+        
+        //Get post's properties
+        $id = $this->getData('id');
+        $title = $this->getData('title');
+        $text = $this->getData('text');
+        
+        //Get user id which is signed in now
+        $user_id = Auth::getSignedInUserId();
+        
+        //Query database
+        DB::prepare("
+            UPDATE
+                `posts` SET
+                `editor_id`=?,
+                `updated_at`=?,
+                `title`=?,
+                `text`=?
+            WHERE
+                `id`=?
+        ")
+            ->bindParam('d', $user_id)
+            ->bindParam('s', date("Y-m-d H:i:s"))
+            ->bindParam('s', $title)
+            ->bindParam('s', $text)
+            ->bindParam('d', $id)
+            ->exec();
+
+        //Answer
+        return $this->sendJson(['result' => 'success']);
+    }
+
+
     public function removePostAction()
     {
         //Check all input data to be presented

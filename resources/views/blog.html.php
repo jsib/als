@@ -74,10 +74,11 @@
                         </div>
                         <div class="modal-footer">
                             <div class="form-group">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary" id="editButton">Save</button>
                             </div>
                         </div>
+                        <input type='hidden' id="inputId" name='id' value=''>
                     </form>
                 </div>
             </div>

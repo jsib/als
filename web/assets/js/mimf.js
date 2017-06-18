@@ -66,7 +66,7 @@ $('#addPostForm').validator({
             text: text
         },
         error: function(data) {
-            alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
+            console.log('AJAX response for "' + this.url + '" error:\n' + data.responseText);
         },
         success : function(data) {
             if (data.result == 'success') {
@@ -89,7 +89,7 @@ function addPostMedia(post)
     //Create inside divs
     let $div = $("<div class='media' id='post-id_" + post.id + "'></div>");
     let $divLeft = $("<div class='media-left'></div>");
-    let $title = $("<h4>" + post.title + "</h4>");
+    let $title = $("<h4><span class='postTitle'>" + post.title + "</span></h4>");
     let $divBody = $("<div class='media-body'></div>");
     let $img = $("<a href=''><img src='#' alt='' class='media-object post-image'></a>");
     let $divEdit = "<a class='glyphicon glyphicon-pencil edit-post' href='#' onclick='editPost(" + post.id + ");return false;'></a>"; 
@@ -100,7 +100,7 @@ function addPostMedia(post)
     $title.append($divRemove);
     $divLeft.prepend($img);
     $divBody.prepend($title);
-    $divBody.append(post.text);
+    $divBody.append("<div class='postText'>" + post.text + "</div>");
     $div.prepend($divLeft);
     $div.append($divBody);
     
@@ -151,6 +151,7 @@ function editPost(post_id)
                 console.log(data.post);
                 $('#editPostModal #inputTitle').val(post.title);
                 $('#editPostModal #inputText').val(post.text);
+                $('#editPostModal #inputId').val(post_id);
                 $('#editPostModal').modal();
             }
         }
@@ -182,8 +183,10 @@ $('#editPostForm').validator({
     }
 
     //Define helper variables
-    let title = $("#inputTitle").val();
-    let text = $("#inputText").val();
+    let id = $('#editPostModal #inputId').val();
+    let title = $("#editPostModal #inputTitle").val();
+    let text = $("#editPostModal #inputText").val();
+    //alert('id: ' + id + ',title: ' + title + ',text: ' + text);
 
     //Let's submit form with ajax!
     $.ajax({
@@ -191,6 +194,7 @@ $('#editPostForm').validator({
         type: "POST",
         dataType: "json",
         data: {
+            id: id,
             title: title,
             text: text
         },
@@ -198,8 +202,10 @@ $('#editPostForm').validator({
             alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
         },
         success : function(data) {
+            console.log('AJAX response for "' + this.url + '" success:\n');
+            console.log(data);  
+
             if (data.result == 'success') {
-                id = data.id;
                 editPostMedia({title, text, id});
                 $('#editPostModal').modal('hide');
                 $("#inputTitle").val('');
@@ -211,3 +217,14 @@ $('#editPostForm').validator({
     //Prevent from scrolling
     return false;
 });
+
+function editPostMedia(post)
+{
+
+    post_id = "#post-id_" + post.id;
+    console.log(post);
+    console.log('edit post media');
+    console.log(post_id);
+    $(post_id + ' .postTitle').html(post.title);
+    $(post_id + ' .postText').html(post.text);
+}
