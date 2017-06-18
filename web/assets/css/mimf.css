@@ -1,3 +1,14 @@
+/*Navbar style*/
+ul.navbar-nav {
+	margin: 0;
+	padding-top: 0 0 0 0;
+}
+li.nav-item {
+	padding:0;
+	margin:0;
+	list-style-type: none;
+}
+
 img.post-image{
     width:64px;
     height:64px;
@@ -6,4 +17,6 @@ a.edit-post, a.remove-post {
 	padding-left:10px;
 	text-decoration: none;
 }
+
+
 

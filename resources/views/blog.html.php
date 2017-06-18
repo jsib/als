@@ -1,7 +1,31 @@
 <?php $this->extend('base') ?>
 
-<?php $this->start('body') ?><br/>
+<?php $this->start('body') ?>
+    <br/>
     <div class="container">
+        <!-- Navigation bar -->
+        <nav class="navbar navbar-inverse bg-inverse">
+            <!--<a class="navbar-brand" href="#">Main</a>-->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Dashboard<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Posts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Employees</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav navbar-right">
+                <li>
+                    <button type="button" class="btn btn-default navbar-btn">Sign in</button>
+                </li>
+            </ul>
+        </nav>
+        <!-- //Navigation bar -->
+
+
         <h1 align="center">MIMF is my framework</h1>
         <br/>
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
