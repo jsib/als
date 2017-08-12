@@ -5,22 +5,20 @@
 <?php $this->start('body') ?>
     <div class="container">
          <form class="form-signin" id="loginForm">
-            <h2 class="form-signin-heading">Please sign in</h2>
+            <h2 class="form-signin-heading">Пожалуйста, авторизуйтесь</h2>
             <div class="alert alert-danger hidden" role="alert" id="submitAnswer">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                <span class="sr-only">Error:</span>
+                <span class="sr-only">Ошибка:</span>
                 <span id='answerText'></span>
             </div>
             <label for="inputEmail" class="sr-only">Email address</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+            <label for="inputPassword" class="sr-only">Пароль</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required>
             <div class="checkbox">
-            <label>
-               <input type="checkbox" value="remember-me"> Remember me
-            </label>
+
            </div>
-           <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+           <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
          </form>
 
     </div> <!-- /container -->
@@ -54,7 +52,7 @@
                 success : function(answer) {
                     switch (answer.type) {
                         case 'error':
-                            $('#answerText').text('Invalid email or password');
+                            $('#answerText').text('Неверное имя пользователя или пароль');
                             $('#submitAnswer').removeClass("alert-success");
                             $('#submitAnswer').addClass("alert-danger");
                             $('#submitAnswer').removeClass("hidden");

@@ -6,31 +6,24 @@
         <!-- Navigation bar -->
         <nav class="navbar navbar-inverse bg-inverse">
             <!--<a class="navbar-brand" href="#">Main</a>-->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Dashboard<span class="sr-only">(current)</span></a>
+            <ul class="navbar-right">
+                <li class="my-nav-item">
+                    Пользователь
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Posts</a>
+                <li class="my-nav-button">
+                    <button type="button" class="btn btn-default navbar-btn">Войти</button>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Employees</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav navbar-right">
-                <li>
-                    <button type="button" class="btn btn-default navbar-btn">Sign in</button>
-                </li>
+
             </ul>
         </nav>
         <!-- //Navigation bar -->
 
 
-        <h1 align="center">MIMF is my framework</h1>
+        <h1 align="center">Задачник</h1>
         <br/>
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
             data-target="#addPostModal">
-            <span class="glyphicon glyphicon-plus"></span> Add post
+            <span class="glyphicon glyphicon-plus"></span> Добавить задачу
         </button>
         <br/><br/>
         <div id="postsList"></div>
@@ -41,7 +34,7 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"
                                 aria-hidden="true">&times;</button>
-                            <h3 class="modal-title">Add post</h3>
+                            <h3 class="modal-title">Добавить задачу</h3>
                         </div>
                         <div class="modal-body">
                             <div class="alert alert-danger hidden" role="alert" id="submitAnswer">
@@ -50,13 +43,23 @@
                                 <span id='answerText'></span>
                             </div>
                             <div class="form-group">
-                              <label for="inputTitle">Title</label>
-                              <input type="text" data-noempty class="form-control" id="inputTitle" placeholder="Title" required>
+                              <label for="inputTitle">Имя пользователя</label>
+                              <input type="text" data-noempty class="form-control" id="inputTitle" placeholder="Имя пользователя" required>
                               <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
-                              <label for="inputText">Text</label>
-                              <textarea data-noempty class="form-control" id="inputText" placeholder="Text" rows="7" required></textarea>
+                              <label for="inputEmail">E-mail</label>
+                              <input type="text" data-noempty class="form-control" id="inputEmail" placeholder="E-mail" required>
+                              <div class="help-block with-errors"></div>
+                            </div>                           
+                            <div class="form-group">
+                              <label for="inputText">Текст задачи</label>
+                              <textarea data-noempty class="form-control" id="inputText" placeholder="Текст задачи" rows="7" required></textarea>
+                              <div class="help-block with-errors"></div>
+                            </div>                       
+                            <div class="form-group">
+                              <label for="inputPicture">Картинка (320*240)</label>
+                              <textarea data-noempty class="form-control" id="inputPicture" placeholder="Картинка (320*240)" rows="7" required></textarea>
                               <div class="help-block with-errors"></div>
                             </div>                       
                         </div>

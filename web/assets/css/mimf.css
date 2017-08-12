@@ -3,10 +3,17 @@ ul.navbar-nav {
 	margin: 0;
 	padding-top: 0 0 0 0;
 }
-li.nav-item {
+li.my-nav-item, li.my-nav-button {
 	padding:0;
-	margin:0;
-	list-style-type: none;
+	margin-right:30px;
+	float:left;
+	list-style-type:none;
+}
+
+li.my-nav-item {
+	padding-top:15px;
+	font-size:12pt;
+	color:#FFF;
 }
 
 img.post-image{
