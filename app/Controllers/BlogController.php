@@ -11,7 +11,7 @@ class BlogController extends Controller
     {
         $posts_res = DB::prepare(
             'SELECT * FROM `posts`
-                ORDER BY `created_at` DESC'
+                ORDER BY `id` DESC'
         )
             ->exec()
             ->getResult();
@@ -62,7 +62,8 @@ class BlogController extends Controller
         }
         
         //Get post's properties
-        $title = $this->getData('title');
+        $username = $this->getData('username');
+        $email = $this->getData('email');
         $text = $this->getData('text');
         
         //Get user id which is signed in now
@@ -71,14 +72,12 @@ class BlogController extends Controller
         //Query database
         DB::prepare(
             "INSERT INTO `posts` SET
-                `user_id`=?,
-                `created_at`=?,
-                `title`=?,
+                `username`=?,
+                `email`=?,
                 `text`=?"
         )
-            ->bindParam('d', $user_id)
-            ->bindParam('s', date("Y-m-d H:i:s"))
-            ->bindParam('s', $title)
+            ->bindParam('s', $username)
+            ->bindParam('s', $email)
             ->bindParam('s', $text)
             ->exec();
 

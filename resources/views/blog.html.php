@@ -43,8 +43,8 @@
                                 <span id='answerText'></span>
                             </div>
                             <div class="form-group">
-                              <label for="inputTitle">Имя пользователя</label>
-                              <input type="text" data-noempty class="form-control" id="inputTitle" placeholder="Имя пользователя" required>
+                              <label for="inputUsername">Имя пользователя</label>
+                              <input type="text" data-noempty class="form-control" id="inputUsername" placeholder="Имя пользователя" required>
                               <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">

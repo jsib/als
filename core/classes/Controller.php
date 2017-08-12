@@ -32,7 +32,7 @@ class Controller
     public function getData($name)
     {
         if (!isset($_POST[$name])) {
-            \ajax_error('There is no variable "$name" in post array.');
+            \ajax_error('There is no variable "'. $name . '" in post array.');
         }
         
         return trim($_POST[$name]);

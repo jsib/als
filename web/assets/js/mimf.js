@@ -53,7 +53,8 @@ $('#addPostForm').validator({
     }
 
     //Define helper variables
-    let title = $("#inputTitle").val();
+    let username = $("#inputUsername").val();
+    let email = $("#inputEmail").val();
     let text = $("#inputText").val();
 
     //Let's submit form with ajax!
@@ -62,7 +63,8 @@ $('#addPostForm').validator({
         type: "POST",
         dataType: "json",
         data: {
-            title: title,
+            username: username,
+            email: email,
             text: text
         },
         error: function(data) {
@@ -71,9 +73,10 @@ $('#addPostForm').validator({
         success : function(data) {
             if (data.result == 'success') {
                 id = data.id;
-                addPostMedia({title, text, id});
+                addPostMedia({username, email, text, id});
                 $('#addPostModal').modal('hide');
-                $("#inputTitle").val('');
+                $("#inputUsername").val('');
+                $("#inputEmail").val('');
                 $("#inputText").val('');
                 $('html, body').stop();
             }
@@ -89,7 +92,7 @@ function addPostMedia(post)
     //Create inside divs
     let $div = $("<div class='media' id='post-id_" + post.id + "'></div>");
     let $divLeft = $("<div class='media-left'></div>");
-    let $title = $("<h4><span class='postTitle'>" + post.title + "</span></h4>");
+    let $title = $("<h4><span class='postTitle'>" + post.email + "</span></h4>");
     let $divBody = $("<div class='media-body'></div>");
     let $img = $("<a href=''><img src='#' alt='' class='media-object post-image'></a>");
     let $divEdit = "<a class='glyphicon glyphicon-pencil edit-post' href='#' onclick='editPost(" + post.id + ");return false;'></a>"; 
