@@ -5,8 +5,13 @@ $(document).ready(function() {
 
     //Set handlers for sorting columns
     $("#emailCol a").click(function(){
-        loadPosts('email', 'desc');
+        loadPosts('email', 'asc');
     });
+
+    $("#statusCol a").click(function(){
+        loadPosts('status', 'asc');
+    });
+
 });
 
 $('#addPostForm').validator({
@@ -67,16 +72,30 @@ $('#addPostForm').validator({
     return false;
 });
 
+//Put a post to page
 function addPostMedia(post)
 {
+    let status;
+
+    //Prepare status to human view
+    switch (post.status) {
+        case 0:
+            status = "<span style='color:#d9534f;' class='glyphicon glyphicon-remove'></span>";
+            break;
+        case 1:
+            status = "<span style='color:#5cb85c;' class='glyphicon glyphicon-ok'></span>";
+            break;
+    }
+
     //Create inside divs
     let $tr = $("<tr class='table-line'></tr>");
     let $td1 = $("<td>" + post.username + "</td>");
     let $td2 = $("<td>" + post.email + "</td>");
     let $td3 = $("<td>" + post.text + "</td>");
     let $td4 = $("<td><img src='#' alt=''></a></td>");
-    let $td5 = "<td><a class='glyphicon glyphicon-pencil edit-post' href='#' onclick='editPost(" + post.id + ");return false;'></a></td>";
-    let $td6 = "<td><a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id + ");return false;'></a></td>";
+    let $td5 = $("<td class='statusCell'>" + status + "</span></td>");
+    let $td6 = "<td><a class='glyphicon glyphicon-pencil edit-post' href='#' onclick='editPost(" + post.id + ");return false;'></a></td>";
+    let $td7 = "<td><a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id + ");return false;'></a></td>";
     
     //Structure divs
     $tr.append($td1);
@@ -85,6 +104,7 @@ function addPostMedia(post)
     $tr.append($td4);
     $tr.append($td5);
     $tr.append($td6);
+    $tr.append($td7);
 
     //Attach ready media to container
     $('#tableHeader').after($tr);
@@ -214,8 +234,9 @@ function editPostMedia(post)
 function sortPostsArray(colName, sortDirection)
 {
     posts.sort(function(b,a){
-        let textA = a[colName].toLowerCase();
-        let textB = b[colName].toLowerCase();
+        let textA = a[colName].toString().toLowerCase();
+        let textB = b[colName].toString().toLowerCase();
+
         if (textA < textB) {
             switch (sortDirection) {
                 case 'asc':
@@ -250,6 +271,7 @@ function sortPostsArray(colName, sortDirection)
     setSortMark(colName, sortDirection);
 }
 
+//Load posts from server and show them on page
 function loadPosts(colName, sortDirection) {
     //Remove existent lines
     $(".table-line").remove();
@@ -282,6 +304,7 @@ function loadPosts(colName, sortDirection) {
     });
 }
 
+//Marking header for current sort column
 function setSortMark(colName, sortDirection)
 {
     //Remove previous sort mark
@@ -289,12 +312,12 @@ function setSortMark(colName, sortDirection)
     $col = $("#" + colName + "Col");
 
     if (sortDirection == "desc") {
-        classPostfix = "-alt";
+        classPostfix = "down";
     } else {
-        classPostfix = "";
+        classPostfix = "up";
     }
 
-    $col.append(" <a href='#' id='sortMark' class='glyphicon glyphicon-sort-by-attributes" + classPostfix + "'></a>");
+    $col.append(" <span id='sortMark' class='glyphicon glyphicon-arrow-" + classPostfix + "'></span>");
 
     //Get new sort direction
     switch (sortDirection) {

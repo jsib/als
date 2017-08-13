@@ -29,11 +29,19 @@ a.edit-post, a.remove-post {
 	width:170px;
 }
 
+#statusCol {
+	width:100px;
+}
+
 #tableHeader a.sortColumn {
 	color: black;
 }
 
 th {
+	text-align:center;
+}
+
+td.statusCell {
 	text-align:center;
 }
 

@@ -35,6 +35,7 @@
                 <th id="emailCol"><a href="#" class="sortColumn">E-mail</a></th>
                 <th id="textCol"><a href="#" class="sortColumn">Текст задачи</a></th>
                 <th id="pictureCol"><a href="#" class="sortColumn">Картинка</a></th>
+                <th id="statusCol"><a href="#" class="sortColumn">Статус</a></th>
             </tr>
         </table>
         <div id="addPostModal" class="modal">
