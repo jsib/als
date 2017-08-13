@@ -41,7 +41,11 @@ th {
 	text-align:center;
 }
 
-td.statusCell {
+td.postStatus {
 	text-align:center;
 }
 
+input[type="checkbox"] {
+	position: relative;
+	top: 2px;
+}

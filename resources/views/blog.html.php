@@ -50,7 +50,7 @@
                         <div class="modal-body">
                             <div class="alert alert-danger hidden" role="alert" id="submitAnswer">
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                <span class="sr-only">Error:</span>
+                                <span class="sr-only">Ошибка:</span>
                                 <span id='answerText'></span>
                             </div>
                             <div class="form-group">
@@ -91,29 +91,43 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"
                                 aria-hidden="true">&times;</button>
-                            <h3 class="modal-title">Edit post</h3>
+                            <h3 class="modal-title">Редактировать задачу</h3>
                         </div>
                         <div class="modal-body">
                             <div class="alert alert-danger hidden" role="alert" id="submitAnswer">
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                <span class="sr-only">Error:</span>
+                                <span class="sr-only">Ошибка:</span>
                                 <span id='answerText'></span>
                             </div>
                             <div class="form-group">
-                              <label for="inputTitle">Title</label>
-                              <input type="text" data-noempty class="form-control" id="inputTitle" placeholder="Title" required>
-                              <div class="help-block with-errors"></div>
+                                <label for="inputUsername">Имя пользователя</label>
+                                <input type="text" data-noempty class="form-control" id="inputUsername" placeholder="Имя пользователя" required>
+                                <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
-                              <label for="inputText">Text</label>
-                              <textarea data-noempty class="form-control" id="inputText" placeholder="Text" rows="7" required></textarea>
-                              <div class="help-block with-errors"></div>
-                            </div>                       
+                                <label for="inputEmail">E-mail</label>
+                                <input type="text" data-noempty class="form-control" id="inputEmail" placeholder="E-mail" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputText">Текст задачи</label>
+                                <textarea data-noempty class="form-control" id="inputText" placeholder="Текст задачи" rows="7" required></textarea>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPicture">Картинка (320*240)</label>
+                                <textarea data-noempty class="form-control" id="inputPicture" placeholder="Картинка (320*240)" rows="7" required></textarea>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputStatus">Статус&nbsp;&nbsp;<input type="checkbox" id="inputStatus"></label>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <div class="form-group">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary" id="editButton">Save</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Не сохранять</button>
+                                <button type="submit" class="btn btn-primary" id="editButton">Сохранить</button>
                             </div>
                         </div>
                         <input type='hidden' id="inputId" name='id' value=''>

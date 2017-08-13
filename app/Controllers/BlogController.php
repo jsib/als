@@ -91,34 +91,42 @@ class BlogController extends Controller
 
     public function editPostAction()
     {
-        //Check all input data to be presented
-        if (!isset($_POST['id']) || !isset($_POST['title']) || !isset($_POST['text'])) {
-            return $this->sendJsonAnswer('error');
+        //Check if all input data are presented
+        foreach(['id', 'username', 'email', 'text', 'picture', 'status'] as $fieldName) {
+            if (!isset($_POST[$fieldName])) {
+                return $this->sendJsonAnswer('error', 'Fill "' . $fieldName .'"" field.');
+            }
         }
-        
+
         //Get post's properties
         $id = $this->getData('id');
-        $title = $this->getData('title');
+        $username = $this->getData('username');
+        $email = $this->getData('email');
         $text = $this->getData('text');
-        
+        $picture = $this->getData('picture');
+        $status = $this->getData('status');
+
         //Get user id which is signed in now
         $user_id = Auth::getSignedInUserId();
         
         //Query database
         DB::prepare("
             UPDATE
-                `posts` SET
-                `editor_id`=?,
-                `updated_at`=?,
-                `title`=?,
-                `text`=?
+              `posts` 
+            SET
+                `username`=?,
+                `email`=?,
+                `text`=?,
+                `picture`=?,                
+                `status`=?
             WHERE
                 `id`=?
         ")
-            ->bindParam('d', $user_id)
-            ->bindParam('s', date("Y-m-d H:i:s"))
-            ->bindParam('s', $title)
+            ->bindParam('s', $username)
+            ->bindParam('s', $email)
             ->bindParam('s', $text)
+            ->bindParam('s', $picture)
+            ->bindParam('d', $status)
             ->bindParam('d', $id)
             ->exec();
 

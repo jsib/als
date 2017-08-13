@@ -58,7 +58,7 @@ $('#addPostForm').validator({
         success : function(data) {
             if (data.result == 'success') {
                 id = data.id;
-                addPostMedia({username, email, text, id});
+                addPostRow({username, email, text, id});
                 $('#addPostModal').modal('hide');
                 $("#inputUsername").val('');
                 $("#inputEmail").val('');
@@ -72,30 +72,23 @@ $('#addPostForm').validator({
     return false;
 });
 
-//Put a post to page
-function addPostMedia(post)
+//Put a post row to table
+function addPostRow(post)
 {
-    let status;
+    //Form post id
+    post_id = "post-id_" + post.id;
 
     //Prepare status to human view
-    switch (post.status) {
-        case 0:
-            status = "<span style='color:#d9534f;' class='glyphicon glyphicon-remove'></span>";
-            break;
-        case 1:
-            status = "<span style='color:#5cb85c;' class='glyphicon glyphicon-ok'></span>";
-            break;
-    }
+    let statusHuman = statusToHuman(post.status);
 
     //Create inside divs
-    let $tr = $("<tr class='table-line'></tr>");
-    let $td1 = $("<td>" + post.username + "</td>");
-    let $td2 = $("<td>" + post.email + "</td>");
-    let $td3 = $("<td>" + post.text + "</td>");
+    let $tr = $("<tr class='table-line' id='" + post_id + "' onclick='editPost(" + post.id + ");return false;'></tr>");
+    let $td1 = $("<td class='postUsername'>" + post.username + "</td>");
+    let $td2 = $("<td class='postEmail'>" + post.email + "</td>");
+    let $td3 = $("<td class='postText'>" + post.text + "</td>");
     let $td4 = $("<td><img src='#' alt=''></a></td>");
-    let $td5 = $("<td class='statusCell'>" + status + "</span></td>");
-    let $td6 = "<td><a class='glyphicon glyphicon-pencil edit-post' href='#' onclick='editPost(" + post.id + ");return false;'></a></td>";
-    let $td7 = "<td><a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id + ");return false;'></a></td>";
+    let $td5 = $("<td class='postStatus'>" + statusHuman + "</span></td>");
+    let $td6 = "<td><a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id + ");return false;'></a></td>";
     
     //Structure divs
     $tr.append($td1);
@@ -104,7 +97,6 @@ function addPostMedia(post)
     $tr.append($td4);
     $tr.append($td5);
     $tr.append($td6);
-    $tr.append($td7);
 
     //Attach ready media to container
     $('#tableHeader').after($tr);
@@ -148,10 +140,26 @@ function editPost(post_id)
         success : function(data) {
             console.log('AJAX response for "' + this.url + '" success:\n');
             if (data.result == 'success') {
+                //Put data from server to array
                 post = data.post;
+
+                //Show data in console
                 console.log(data.post);
-                $('#editPostModal #inputTitle').val(post.title);
+
+                //Put variable to form on page
+                $('#editPostModal #inputUsername').val(post.username);
+                $('#editPostModal #inputEmail').val(post.email);
                 $('#editPostModal #inputText').val(post.text);
+                $('#editPostModal #inputPicture').val(post.picture);
+
+                //Define variable for checkbox
+                if (post.status == 1 ) {
+                    $('#editPostModal #inputStatus').prop('checked', true);
+                } else {
+                    $('#editPostModal #inputStatus').prop('checked', false);
+                }
+
+                //Put id value and show modal
                 $('#editPostModal #inputId').val(post_id);
                 $('#editPostModal').modal();
             }
@@ -160,6 +168,7 @@ function editPost(post_id)
 
 }
 
+//Validate form field by JS
 $('#editPostForm').validator({
     disable: true,
     focus: false,
@@ -177,6 +186,7 @@ $('#editPostForm').validator({
             }
         }
     }
+//Handle form submission
 }).on('submit', function(event) {
     //Do nothing if some form checks is invalid
     if (event.isDefaultPrevented()) {
@@ -185,9 +195,18 @@ $('#editPostForm').validator({
 
     //Define helper variables
     let id = $('#editPostModal #inputId').val();
-    let title = $("#editPostModal #inputTitle").val();
+    let username = $("#editPostModal #inputUsername").val();
+    let email = $("#editPostModal #inputEmail").val();
     let text = $("#editPostModal #inputText").val();
-    //alert('id: ' + id + ',title: ' + title + ',text: ' + text);
+    let picture = $("#editPostModal #inputPicture").val();
+
+    //Get value of checkbox
+    let status;
+    if($("#editPostModal #inputStatus").prop('checked') === true) {
+        status = 1;
+    } else {
+        status = 0;
+    }
 
     //Let's submit form with ajax!
     $.ajax({
@@ -196,21 +215,32 @@ $('#editPostForm').validator({
         dataType: "json",
         data: {
             id: id,
-            title: title,
-            text: text
+            username: username,
+            email: email,
+            text: text,
+            picture: picture,
+            status: status
         },
         error: function(data) {
-            alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
+            console.log('AJAX response for "' + this.url + '" error:\n' + data.responseText);
         },
         success : function(data) {
             console.log('AJAX response for "' + this.url + '" success:\n');
             console.log(data);  
 
             if (data.result == 'success') {
-                editPostMedia({title, text, id});
+                //Edit existing row in table on page
+                editPostRow({username, email, text, picture, status, id});
+
+                //Hide edit modal
                 $('#editPostModal').modal('hide');
-                $("#inputTitle").val('');
+
+                //Prepare modal, clean values
+                $("#inputUsername").val('');
+                $("#inputEmail").val('');
                 $("#inputText").val('');
+                $("#inputPicture").val('');
+                $("#inputStatus").val('');
             }
         }
     });
@@ -219,15 +249,17 @@ $('#editPostForm').validator({
     return false;
 });
 
-function editPostMedia(post)
+function editPostRow(post)
 {
-
+    //Form post id
     post_id = "#post-id_" + post.id;
-    console.log(post);
-    console.log('edit post media');
-    console.log(post_id);
-    $(post_id + ' .postTitle').html(post.title);
+
+    //Change the row in table
+    $(post_id + ' .postUsername').html(post.username);
+    $(post_id + ' .postEmail').html(post.email);
     $(post_id + ' .postText').html(post.text);
+    $(post_id + ' .postPicture').html(post.picture);
+    $(post_id + ' .postStatus').html(statusToHuman(post.status));
 }
 
 //Sort array
@@ -284,7 +316,6 @@ function loadPosts(colName, sortDirection) {
         data: {
         },
         error: function(data) {
-            //alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
             console.log('AJAX response for "' + this.url + '" error:\n' + data.responseText);
         },
         success : function(data) {
@@ -297,7 +328,7 @@ function loadPosts(colName, sortDirection) {
 
                 //Add post content
                 $.each(posts, function(key, post) {
-                    addPostMedia(post);
+                    addPostRow(post);
                 });
             }
         }
@@ -338,4 +369,17 @@ function setSortMark(colName, sortDirection)
     $col.click(function() {
         loadPosts(colName, newSortDirection);
     });
+}
+
+//Transform status code for human viewing
+function statusToHuman(status)
+{
+    switch (status) {
+        case 0:
+            return "<span style='color:#d9534f;' class='glyphicon glyphicon-remove'></span>";
+            break;
+        case 1:
+            return "<span style='color:#5cb85c;' class='glyphicon glyphicon-ok'></span>";
+            break;
+    }
 }
