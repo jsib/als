@@ -2,6 +2,11 @@
 $(document).ready(function() {
     //Load posts
     loadPosts('username', 'asc');
+
+    //Set handlers for sorting columns
+    $("#emailCol a").click(function(){
+        loadPosts('email', 'desc');
+    });
 });
 
 $('#addPostForm').validator({
@@ -205,7 +210,8 @@ function editPostMedia(post)
     $(post_id + ' .postText').html(post.text);
 }
 
-function sortByColumn(colName, sortDirection)
+//Sort array
+function sortPostsArray(colName, sortDirection)
 {
     posts.sort(function(b,a){
         let textA = a[colName].toLowerCase();
@@ -265,7 +271,7 @@ function loadPosts(colName, sortDirection) {
                 posts = data.posts;
 
                 // Sorting
-                sortByColumn(colName, sortDirection);
+                sortPostsArray(colName, sortDirection);
 
                 //Add post content
                 $.each(posts, function(key, post) {
@@ -302,9 +308,11 @@ function setSortMark(colName, sortDirection)
             newSortDirection = 'desc';
     }
 
-    //Set onclick event
+    //Remove existing handler
+    $col.off("click");
+
+    //Add new handler
     $col.click(function() {
         loadPosts(colName, newSortDirection);
     });
-
 }

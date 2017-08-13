@@ -29,12 +29,12 @@
         </button>
         <br/><br/>
 
-        <table id="postsList" class="table">
+        <table id="postsList" class="table table-hover">
             <tr id="tableHeader">
-                <th id="usernameCol">Имя пользователя</th>
-                <th>E-mail</th>
-                <th>Текст задачи</th>
-                <th>Картинка</th>
+                <th id="usernameCol"><a href="#" class="sortColumn">Имя пользователя</a></th>
+                <th id="emailCol"><a href="#" class="sortColumn">E-mail</a></th>
+                <th id="textCol"><a href="#" class="sortColumn">Текст задачи</a></th>
+                <th id="pictureCol"><a href="#" class="sortColumn">Картинка</a></th>
             </tr>
         </table>
         <div id="addPostModal" class="modal">

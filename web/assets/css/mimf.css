@@ -29,3 +29,11 @@ a.edit-post, a.remove-post {
 	width:170px;
 }
 
+#tableHeader a.sortColumn {
+	color: black;
+}
+
+th {
+	text-align:center;
+}
+
