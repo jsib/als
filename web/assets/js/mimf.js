@@ -1,32 +1,7 @@
 //Load posts list
 $(document).ready(function() {
-    $.ajax({
-        url: "/blog/posts/load/",
-        type: "POST",
-        dataType: "json",
-        data: {
-        },
-        error: function(data) {
-            //alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
-            console.log('AJAX response for "' + this.url + '" error:\n' + data.responseText);
-        },
-        success : function(data) {
-            console.log('AJAX response for "' + this.url + '" success.');
-            if (data.result == 'success') {
-                posts = data.posts;
-
-                //Sort object by datetime of creation
-                posts.sort(function(b,a){
-                    return new Date(b.created_at) - new Date(a.created_at);
-                });
-                
-                //Add post content
-                $.each(posts, function(key, post) {
-                  addPostMedia(post);
-                });
-            }
-        }
-    });
+    //Load posts
+    loadPosts('username', 'asc');
 });
 
 $('#addPostForm').validator({
@@ -90,27 +65,25 @@ $('#addPostForm').validator({
 function addPostMedia(post)
 {
     //Create inside divs
-    let $div = $("<div class='media' id='post-id_" + post.id + "'></div>");
-    let $divLeft = $("<div class='media-left'></div>");
-    let $title = $("<h4><span class='postTitle'>" + post.email + "</span></h4>");
-    let $divBody = $("<div class='media-body'></div>");
-    let $img = $("<a href=''><img src='#' alt='' class='media-object post-image'></a>");
-    let $divEdit = "<a class='glyphicon glyphicon-pencil edit-post' href='#' onclick='editPost(" + post.id + ");return false;'></a>"; 
-    let $divRemove = "<a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id + ");return false;'></a>";
+    let $tr = $("<tr class='table-line'></tr>");
+    let $td1 = $("<td>" + post.username + "</td>");
+    let $td2 = $("<td>" + post.email + "</td>");
+    let $td3 = $("<td>" + post.text + "</td>");
+    let $td4 = $("<td><img src='#' alt=''></a></td>");
+    let $td5 = "<td><a class='glyphicon glyphicon-pencil edit-post' href='#' onclick='editPost(" + post.id + ");return false;'></a></td>";
+    let $td6 = "<td><a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id + ");return false;'></a></td>";
     
     //Structure divs
-    $title.append($divEdit);
-    $title.append($divRemove);
-    $divLeft.prepend($img);
-    $divBody.prepend($title);
-    $divBody.append("<div class='postText'>" + post.text + "</div>");
-    $div.prepend($divLeft);
-    $div.append($divBody);
-    
-    //Attach ready media to container
-    $('#postsList').prepend($div);
-}
+    $tr.append($td1);
+    $tr.append($td2);
+    $tr.append($td3);
+    $tr.append($td4);
+    $tr.append($td5);
+    $tr.append($td6);
 
+    //Attach ready media to container
+    $('#tableHeader').after($tr);
+}
 
 function removePost(id)
 {
@@ -230,4 +203,108 @@ function editPostMedia(post)
     console.log(post_id);
     $(post_id + ' .postTitle').html(post.title);
     $(post_id + ' .postText').html(post.text);
+}
+
+function sortByColumn(colName, sortDirection)
+{
+    posts.sort(function(b,a){
+        let textA = a[colName].toLowerCase();
+        let textB = b[colName].toLowerCase();
+        if (textA < textB) {
+            switch (sortDirection) {
+                case 'asc':
+                    return -1;
+                    break;
+                case 'desc':
+                    return 1;
+                    break;
+                default:
+                    return -1;
+            }
+        }
+        if (textA > textB) {
+            switch (sortDirection) {
+                case 'asc':
+                    return 1;
+                    break;
+                case 'desc':
+                    return -1;
+                    break;
+                default:
+                    return 1;
+            }
+
+        }
+
+        //textA == textB
+        return 0;
+    });
+
+    //Update sort mark
+    setSortMark(colName, sortDirection);
+}
+
+function loadPosts(colName, sortDirection) {
+    //Remove existent lines
+    $(".table-line").remove();
+
+    //Request AJAX
+    $.ajax({
+        url: "/blog/posts/load/",
+        type: "POST",
+        dataType: "json",
+        data: {
+        },
+        error: function(data) {
+            //alert('AJAX response for "' + this.url + '" error:\n' + data.responseText);
+            console.log('AJAX response for "' + this.url + '" error:\n' + data.responseText);
+        },
+        success : function(data) {
+            console.log('AJAX response for "' + this.url + '" success.');
+            if (data.result == 'success') {
+                posts = data.posts;
+
+                // Sorting
+                sortByColumn(colName, sortDirection);
+
+                //Add post content
+                $.each(posts, function(key, post) {
+                    addPostMedia(post);
+                });
+            }
+        }
+    });
+}
+
+function setSortMark(colName, sortDirection)
+{
+    //Remove previous sort mark
+    $("#sortMark").remove();
+    $col = $("#" + colName + "Col");
+
+    if (sortDirection == "desc") {
+        classPostfix = "-alt";
+    } else {
+        classPostfix = "";
+    }
+
+    $col.append(" <a href='#' id='sortMark' class='glyphicon glyphicon-sort-by-attributes" + classPostfix + "'></a>");
+
+    //Get new sort direction
+    switch (sortDirection) {
+        case 'asc':
+            newSortDirection = 'desc';
+            break;
+        case 'desc':
+            newSortDirection = 'asc';
+            break;
+        default:
+            newSortDirection = 'desc';
+    }
+
+    //Set onclick event
+    $col.click(function() {
+        loadPosts(colName, newSortDirection);
+    });
+
 }

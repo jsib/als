@@ -25,5 +25,7 @@ a.edit-post, a.remove-post {
 	text-decoration: none;
 }
 
-
+#usernameCol {
+	width:170px;
+}
 

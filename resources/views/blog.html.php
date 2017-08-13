@@ -1,6 +1,7 @@
 <?php $this->extend('base') ?>
 
 <?php $this->start('body') ?>
+
     <br/>
     <div class="container">
         <!-- Navigation bar -->
@@ -20,13 +21,22 @@
 
 
         <h1 align="center">Задачник</h1>
+
         <br/>
         <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
             data-target="#addPostModal">
             <span class="glyphicon glyphicon-plus"></span> Добавить задачу
         </button>
         <br/><br/>
-        <div id="postsList"></div>
+
+        <table id="postsList" class="table">
+            <tr id="tableHeader">
+                <th id="usernameCol">Имя пользователя</th>
+                <th>E-mail</th>
+                <th>Текст задачи</th>
+                <th>Картинка</th>
+            </tr>
+        </table>
         <div id="addPostModal" class="modal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">

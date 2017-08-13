@@ -11,7 +11,7 @@ class BlogController extends Controller
     {
         $posts_res = DB::prepare(
             'SELECT * FROM `posts`
-                ORDER BY `id` DESC'
+                ORDER BY `username` ASC'
         )
             ->exec()
             ->getResult();
@@ -24,7 +24,9 @@ class BlogController extends Controller
 
     public function loadPostsAction()
     {
-        $posts_res = DB::prepare('SELECT * FROM `posts`')
+        $posts_res = DB::prepare(
+            'SELECT * FROM `posts`'
+        )
             ->exec()
             ->getResult();
         
