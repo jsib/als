@@ -116,7 +116,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="inputPicture">Картинка (320*240)</label>
-                                <textarea data-noempty class="form-control" id="inputPicture" placeholder="Картинка (320*240)" rows="7" required></textarea>
+                                <input type="file" id="inputImage" /><br/>
+                                <div id="imagePreview"></div>
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">

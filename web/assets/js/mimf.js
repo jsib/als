@@ -12,6 +12,18 @@ $(document).ready(function() {
         loadPosts('status', 'asc');
     });
 
+    //Picture change event
+    $('#inputImage').change(function(){
+        prepareImage(this);
+        //convas = document.getElementById('imageConvas');
+
+    });
+
+    if (!isCanvasSupported()) {
+        console.log("Convas is NOT supported!");
+    } else {
+        console.log("Convas is supported!");
+    }
 });
 
 $('#addPostForm').validator({
@@ -150,7 +162,7 @@ function editPost(post_id)
                 $('#editPostModal #inputUsername').val(post.username);
                 $('#editPostModal #inputEmail').val(post.email);
                 $('#editPostModal #inputText').val(post.text);
-                $('#editPostModal #inputPicture').val(post.picture);
+                //$('#editPostModal #inputPicture').val(post.picture);
 
                 //Define variable for checkbox
                 if (post.status == 1 ) {
@@ -383,3 +395,73 @@ function statusToHuman(status)
             break;
     }
 }
+
+//Prepare image for uploading, show image preview
+function prepareImage(input) {
+    if (input.files && input.files[0]) {
+        $img = $("<img>");
+
+        var reader = new FileReader();
+
+        //Prepare handle for reader finish loading the image
+        reader.onload = function (e) {
+            //Change src for image
+            $img.attr('src', e.target.result);
+
+            //Get DOM object from jQuery array
+            imgDOM = $img[0];
+
+            //Get real image width and height
+            imgDOM.onload = function() {
+                //Resize image
+                resizeImage($img, 320, 240);
+            }
+        }
+
+        //Start reading the image
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+//Resize image
+function resizeImage($img, maxWidth, maxHeight) {
+    //Get current image size
+    width = $img.prop('width');
+    height = $img.prop('height');
+
+    //Calculate new image size
+    if (width > height) {
+        if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+        }
+    } else {
+        if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+        }
+    }
+
+    console.log(width);
+    console.log(height);
+
+    //Change image size
+    $img.prop('width', width);
+    $img.prop('height', height);
+
+    //Prepare convas
+    canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    console.log(canvas);
+    console.log(canvas.width);
+    $imagePreview = $("#imagePreview");
+    $imagePreview.empty();
+    $imagePreview.append($(canvas));
+    ctx = canvas.getContext("2d");
+    ctx.drawImage($img[0], 0, 0, width, height);
+}
+
+
+
+
