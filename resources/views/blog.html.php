@@ -117,7 +117,9 @@
                             <div class="form-group">
                                 <label for="inputPicture">Картинка (320*240)</label>
                                 <input type="file" id="inputImage" /><br/>
-                                <div id="imagePreview"></div>
+                                <div id="imagePreview">
+                                    <img id="preview" />
+                                </div>
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
@@ -127,11 +129,11 @@
                         </div>
                         <div class="modal-footer">
                             <div class="form-group">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Не сохранять</button>
+                                <button type="button" id="closeEditModal" class="btn btn-default" data-dismiss="modal">Не сохранять</button>
                                 <button type="submit" class="btn btn-primary" id="editButton">Сохранить</button>
                             </div>
                         </div>
-                        <input type='hidden' id="inputId" name='id' value=''>
+                        <input type='hidden' id="inputId" name='id' value='' />
                     </form>
                 </div>
             </div>

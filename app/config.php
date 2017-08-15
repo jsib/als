@@ -56,4 +56,9 @@ const NS_D = "<br/>";
  */
 const ASSETS_PATH = '/assets/';
 
+/**
+ * Path to uploaded files
+ */
+const UPLOAD_PATH = './upload/';
+
 

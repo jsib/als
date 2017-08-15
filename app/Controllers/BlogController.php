@@ -51,6 +51,12 @@ class BlogController extends Controller
             ->getResult();
         
         $post = $posts_res->fetch();
+
+        if (file_exists(UPLOAD_PATH . $post_id . ".png")) {
+            $post['image'] = true;
+        } else {
+            $post['image'] = false;
+        }
         
         return $this->sendJson(['result' => 'success', 'post' => $post]);
         
@@ -92,7 +98,7 @@ class BlogController extends Controller
     public function editPostAction()
     {
         //Check if all input data are presented
-        foreach(['id', 'username', 'email', 'text', 'picture', 'status'] as $fieldName) {
+        foreach(['id', 'username', 'email', 'text', 'image', 'status'] as $fieldName) {
             if (!isset($_POST[$fieldName])) {
                 return $this->sendJsonAnswer('error', 'Fill "' . $fieldName .'"" field.');
             }
@@ -103,8 +109,11 @@ class BlogController extends Controller
         $username = $this->getData('username');
         $email = $this->getData('email');
         $text = $this->getData('text');
-        $picture = $this->getData('picture');
+        $img_data_url = $this->getData('image');
         $status = $this->getData('status');
+
+        //Convert and write image's data url to file
+        $this->base64_to_png($img_data_url, UPLOAD_PATH . $id . ".png");
 
         //Get user id which is signed in now
         $user_id = Auth::getSignedInUserId();
@@ -112,12 +121,11 @@ class BlogController extends Controller
         //Query database
         DB::prepare("
             UPDATE
-              `posts` 
+                `posts`
             SET
                 `username`=?,
                 `email`=?,
                 `text`=?,
-                `picture`=?,                
                 `status`=?
             WHERE
                 `id`=?
@@ -125,7 +133,6 @@ class BlogController extends Controller
             ->bindParam('s', $username)
             ->bindParam('s', $email)
             ->bindParam('s', $text)
-            ->bindParam('s', $picture)
             ->bindParam('d', $status)
             ->bindParam('d', $id)
             ->exec();
@@ -160,5 +167,32 @@ class BlogController extends Controller
         //Answer
         return $this->sendJson(['result' => 'success']);
 
+    }
+
+    //Upload image to server
+    public function uploadImageAction()
+    {
+        $this->base64_to_png($_POST['base64_string'], "/var/www/beejee/web/uploaded.png");
+
+        //Answer
+        return $this->sendJson(['result' => 'success', 'post' => $_POST]);
+    }
+
+    private function base64_to_png($base64_string, $output_file) {
+        // open the output file for writing
+        $ifp = fopen( $output_file, 'wb' );
+
+        // split the string on commas
+        // $data[ 0 ] == "data:image/png;base64"
+        // $data[ 1 ] == <actual base64 string>
+        $data = explode( ',', $base64_string );
+
+        // we could add validation here with ensuring count( $data ) > 1
+        fwrite( $ifp, base64_decode( $data[ 1 ] ) );
+
+        // clean up the file resource
+        fclose( $ifp );
+
+        return $output_file;
     }
 }

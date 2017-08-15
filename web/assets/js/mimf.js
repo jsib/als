@@ -12,18 +12,16 @@ $(document).ready(function() {
         loadPosts('status', 'asc');
     });
 
-    //Picture change event
+    //Close edit modal handler
+    $('#editPostModal').on('hidden.bs.modal', function () {
+        closeEditModal();
+    })
+
+    //Image change event
     $('#inputImage').change(function(){
+        //Prepare image for uploading, show image preview
         prepareImage(this);
-        //convas = document.getElementById('imageConvas');
-
     });
-
-    if (!isCanvasSupported()) {
-        console.log("Convas is NOT supported!");
-    } else {
-        console.log("Convas is supported!");
-    }
 });
 
 $('#addPostForm').validator({
@@ -137,6 +135,7 @@ function removePost(id)
     });
 }
 
+//Open modal handler
 function editPost(post_id)
 {
     $.ajax({
@@ -162,7 +161,22 @@ function editPost(post_id)
                 $('#editPostModal #inputUsername').val(post.username);
                 $('#editPostModal #inputEmail').val(post.email);
                 $('#editPostModal #inputText').val(post.text);
-                //$('#editPostModal #inputPicture').val(post.picture);
+
+
+                if (post.image === true) {
+                    $img = $("<img id='preview'>");
+                    $img.prop('src', "http://beejee/upload/" + post_id + ".png");
+
+                    //Get DOM object from jQuery array
+                    imgDOM = $img[0];
+
+                    imgDOM.onload = function() {
+                        $("#imagePreview").append($img);
+                    }
+
+                } else{
+                    $("img#preview").remove();
+                }
 
                 //Define variable for checkbox
                 if (post.status == 1 ) {
@@ -177,7 +191,12 @@ function editPost(post_id)
             }
         }
     });
+}
 
+//Close edit modal handler
+function closeEditModal()
+{
+    $("img#preview").remove();
 }
 
 //Validate form field by JS
@@ -220,6 +239,12 @@ $('#editPostForm').validator({
         status = 0;
     }
 
+    //Create file for uploading from existent preview
+    imgDataUrl = getImageData($("img#preview"));
+
+    //Upload image to server
+    //uploadImage(imgDataUrl, $("#inputId").prop('value'));
+
     //Let's submit form with ajax!
     $.ajax({
         url: "/blog/post/edit",
@@ -230,7 +255,7 @@ $('#editPostForm').validator({
             username: username,
             email: email,
             text: text,
-            picture: picture,
+            image: imgDataUrl,
             status: status
         },
         error: function(data) {
@@ -397,9 +422,10 @@ function statusToHuman(status)
 }
 
 //Prepare image for uploading, show image preview
-function prepareImage(input) {
+function prepareImage(input)
+{
     if (input.files && input.files[0]) {
-        $img = $("<img>");
+        $img = $("<img id='preview'>");
 
         var reader = new FileReader();
 
@@ -413,8 +439,9 @@ function prepareImage(input) {
 
             //Get real image width and height
             imgDOM.onload = function() {
-                //Resize image
-                resizeImage($img, 320, 240);
+                //Resize image and create preview
+                createImagePreview($img, 320, 240);
+
             }
         }
 
@@ -423,8 +450,9 @@ function prepareImage(input) {
     }
 }
 
-//Resize image
-function resizeImage($img, maxWidth, maxHeight) {
+//Resize image and create preview
+function createImagePreview($img, maxWidth, maxHeight)
+{
     //Get current image size
     width = $img.prop('width');
     height = $img.prop('height');
@@ -442,26 +470,63 @@ function resizeImage($img, maxWidth, maxHeight) {
         }
     }
 
-    console.log(width);
-    console.log(height);
-
     //Change image size
     $img.prop('width', width);
     $img.prop('height', height);
 
-    //Prepare convas
-    canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    console.log(canvas);
-    console.log(canvas.width);
+    //Show preview image
     $imagePreview = $("#imagePreview");
     $imagePreview.empty();
-    $imagePreview.append($(canvas));
-    ctx = canvas.getContext("2d");
-    ctx.drawImage($img[0], 0, 0, width, height);
+    $imagePreview.append($img);
 }
 
+//Get preview image data
+function getImageData($img)
+{
+    //Create emty canvas
+    canvas = document.createElement('canvas');
+
+    //Change canvas size
+    canvas.width = $img.prop('width');
+    canvas.height = $img.prop('height');
+
+    //Create preview from canvas
+    ctx = canvas.getContext("2d");
+    ctx.drawImage($img[0], 0, 0, width, height);
+
+    //Get image data from URL and return
+    return canvas.toDataURL("image/png");
+}
+
+//Upload image to server
+function uploadImage(imgDataUrl, postId)
+{
+    $.ajax({
+        url: '/blog/upload_image/',
+        type: 'POST',
+        dataType: "json",
+        // mimeType: "multipart/form-data",
+        // cache: false,
+        // contentType: false,
+        // processData: false,
+        data: {
+            base64_string: imgDataUrl
+        },
+
+        error: function(answer) {
+            console.log('AJAX response for "' + this.url + '" error:\n' + answer.responseText);
+        },
+
+        success : function(answer) {
+            console.log('AJAX response for "' + this.url + '" success.');
+            if (answer.result == 'success') {
+                // posts = data.posts;
+                //console.log(answer.post);
+                console.log(answer);
+            }
+        }
+    });
+}
 
 
 

@@ -14,6 +14,8 @@ Route::add('/blog/{slug}', 'Blog:slug');
 Route::add('/blog/post/add', 'Blog:addPost');
 Route::add('/blog/post/remove', 'Blog:removePost');
 Route::add('/blog/post/edit', 'Blog:editPost');
+Route::add('/blog/upload_image/', 'Blog:uploadImage');
+Route::add('/blog/test_upload/', 'Blog:testUpload');
 
 //Sign in and registration
 Route::add('/sign_in/', 'SignIn:form');
