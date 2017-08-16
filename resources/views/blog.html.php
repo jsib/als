@@ -84,13 +84,11 @@
                 </div>
             </div>
         </div>        
-        <div id="editPostModal" class="modal">
+        <div id="editPostModal" class="modal" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form id="editPostForm">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
                             <h3 class="modal-title">Редактировать задачу</h3>
                         </div>
                         <div class="modal-body">
@@ -115,7 +113,7 @@
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
-                                <label for="inputPicture">Картинка (320*240)</label>
+                                <label for="inputImage">Картинка (320*240)</label>
                                 <input type="file" id="inputImage" /><br/>
                                 <div id="imagePreview">
                                     <img id="preview" />

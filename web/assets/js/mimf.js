@@ -5,10 +5,12 @@ $(document).ready(function() {
 
     //Set handlers for sorting columns
     $("#emailCol a").click(function(){
+        $("#emailCol").off();
         loadPosts('email', 'asc');
     });
 
     $("#statusCol a").click(function(){
+        $("#statusCol").off();
         loadPosts('status', 'asc');
     });
 
@@ -165,7 +167,7 @@ function editPost(post_id)
 
                 if (post.image === true) {
                     $img = $("<img id='preview'>");
-                    $img.prop('src', "http://beejee/upload/" + post_id + ".png");
+                    $img.prop('src', "http://beejee/upload/" + post_id + ".png?timestamp=" + Date.now());
 
                     //Get DOM object from jQuery array
                     imgDOM = $img[0];
@@ -229,7 +231,7 @@ $('#editPostForm').validator({
     let username = $("#editPostModal #inputUsername").val();
     let email = $("#editPostModal #inputEmail").val();
     let text = $("#editPostModal #inputText").val();
-    let picture = $("#editPostModal #inputPicture").val();
+    let picture = $("#editPostModal #inputImage").val();
 
     //Get value of checkbox
     let status;
@@ -239,8 +241,13 @@ $('#editPostForm').validator({
         status = 0;
     }
 
-    //Create file for uploading from existent preview
-    imgDataUrl = getImageData($("img#preview"));
+
+    if($("#inputImage").val()) {
+        //Create file for uploading from existent preview
+        imgDataUrl = getImageData($("img#preview"));
+    } else {
+        imgDataUrl = '';
+    }
 
     //Upload image to server
     //uploadImage(imgDataUrl, $("#inputId").prop('value'));
@@ -276,7 +283,7 @@ $('#editPostForm').validator({
                 $("#inputUsername").val('');
                 $("#inputEmail").val('');
                 $("#inputText").val('');
-                $("#inputPicture").val('');
+                $("#inputImage").val('');
                 $("#inputStatus").val('');
             }
         }
@@ -300,7 +307,7 @@ function editPostRow(post)
 }
 
 //Sort array
-function sortPostsArray(colName, sortDirection)
+function sortPostsArray(posts, colName, sortDirection)
 {
     posts.sort(function(b,a){
         let textA = a[colName].toString().toLowerCase();
@@ -361,7 +368,7 @@ function loadPosts(colName, sortDirection) {
                 posts = data.posts;
 
                 // Sorting
-                sortPostsArray(colName, sortDirection);
+                sortPostsArray(posts, colName, sortDirection);
 
                 //Add post content
                 $.each(posts, function(key, post) {
@@ -404,6 +411,7 @@ function setSortMark(colName, sortDirection)
 
     //Add new handler
     $col.click(function() {
+        console.log("Handler: " + colName);
         loadPosts(colName, newSortDirection);
     });
 }
@@ -492,7 +500,7 @@ function getImageData($img)
 
     //Create preview from canvas
     ctx = canvas.getContext("2d");
-    ctx.drawImage($img[0], 0, 0, width, height);
+    ctx.drawImage($img[0], 0, 0, canvas.width, canvas.height);
 
     //Get image data from URL and return
     return canvas.toDataURL("image/png");

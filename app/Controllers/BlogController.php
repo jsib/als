@@ -112,8 +112,11 @@ class BlogController extends Controller
         $img_data_url = $this->getData('image');
         $status = $this->getData('status');
 
-        //Convert and write image's data url to file
-        $this->base64_to_png($img_data_url, UPLOAD_PATH . $id . ".png");
+        //If new image was uploaded
+        if ($img_data_url != '') {
+            //Convert and write image's data url to file
+            $this->base64_to_png($img_data_url, UPLOAD_PATH . $id . ".png");
+        }
 
         //Get user id which is signed in now
         $user_id = Auth::getSignedInUserId();
