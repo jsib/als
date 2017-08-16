@@ -1,11 +1,12 @@
 //Load posts list
 $(document).ready(function() {
-    //Load posts
+    //Load posts and set default sort column
     loadPosts('username', 'asc');
+    window.prevSortColumn = 'username';
 
     //Set handlers for sorting columns
     $("#emailCol a").click(function(){
-        $("#emailCol").off();
+        //$("#emailCol").off();
         loadPosts('email', 'asc');
     });
 
@@ -317,10 +318,8 @@ function sortPostsArray(posts, colName, sortDirection)
             switch (sortDirection) {
                 case 'asc':
                     return -1;
-                    break;
                 case 'desc':
                     return 1;
-                    break;
                 default:
                     return -1;
             }
@@ -329,10 +328,8 @@ function sortPostsArray(posts, colName, sortDirection)
             switch (sortDirection) {
                 case 'asc':
                     return 1;
-                    break;
                 case 'desc':
                     return -1;
-                    break;
                 default:
                     return 1;
             }
@@ -342,16 +339,10 @@ function sortPostsArray(posts, colName, sortDirection)
         //textA == textB
         return 0;
     });
-
-    //Update sort mark
-    setSortMark(colName, sortDirection);
 }
 
 //Load posts from server and show them on page
 function loadPosts(colName, sortDirection) {
-    //Remove existent lines
-    $(".table-line").remove();
-
     //Request AJAX
     $.ajax({
         url: "/blog/posts/load/",
@@ -365,22 +356,41 @@ function loadPosts(colName, sortDirection) {
         success : function(data) {
             console.log('AJAX response for "' + this.url + '" success.');
             if (data.result == 'success') {
+                //Remove existing rows
+                $(".table-line").remove();
+
+                //Take posts got from server
                 posts = data.posts;
 
-                // Sorting
+                //If we change sort column then first sort direction is always asc
+                if (window.prevSortColumn !== colName) {
+                    sortDirection = 'asc';
+                }
+
+                // Sort posts
                 sortPostsArray(posts, colName, sortDirection);
 
-                //Add post content
+                //Add posts to table
                 $.each(posts, function(key, post) {
                     addPostRow(post);
                 });
+
+                //Set new sort mark
+                setNewSortMark(colName, sortDirection);
+
+                //Set new href
+                setNewSortHref(colName, sortDirection);
+
+                //Set previous sort column name
+                window.prevSortColumn = colName;
+
             }
         }
     });
 }
 
-//Marking header for current sort column
-function setSortMark(colName, sortDirection)
+//Set new sort mark for current sort column in table header
+function setNewSortMark(colName, sortDirection)
 {
     //Remove previous sort mark
     $("#sortMark").remove();
@@ -394,6 +404,11 @@ function setSortMark(colName, sortDirection)
 
     $col.append(" <span id='sortMark' class='glyphicon glyphicon-arrow-" + classPostfix + "'></span>");
 
+}
+
+//Set new href for current sorting column in table header
+function setNewSortHref(colName, sortDirection)
+{
     //Get new sort direction
     switch (sortDirection) {
         case 'asc':
@@ -406,12 +421,14 @@ function setSortMark(colName, sortDirection)
             newSortDirection = 'desc';
     }
 
+    //Get jQuery object for href
+    $colHref = $("#" + colName + "Col a");
+
     //Remove existing handler
-    $col.off("click");
+    $colHref.off("click");
 
     //Add new handler
-    $col.click(function() {
-        console.log("Handler: " + colName);
+    $colHref.click(function() {
         loadPosts(colName, newSortDirection);
     });
 }

@@ -33,7 +33,7 @@ a.edit-post, a.remove-post {
 	width:100px;
 }
 
-#tableHeader a.sortColumn {
+#tableHeader a {
 	color: black;
 }
 
