@@ -41,11 +41,15 @@ th {
 	text-align:center;
 }
 
-td.postStatus {
+td.postImage, td.postStatus {
 	text-align:center;
 }
 
 input[type="checkbox"] {
 	position: relative;
 	top: 2px;
+}
+
+#removeButton {
+	float: left;
 }

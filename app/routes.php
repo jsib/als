@@ -6,7 +6,7 @@
 
 use Core\Facades\Route;
 
-Route::add('/', 'Blog:listPosts');
+Route::add('/', 'Blog:mainPage');
 Route::add('/blog/posts/load/', 'Blog:loadPosts'); 
 Route::add('/blog/{post}/', 'Blog:showPost', ['post' => '\d+']);
 Route::add('/blog/show', 'Blog:show');

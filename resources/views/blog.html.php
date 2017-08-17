@@ -34,7 +34,7 @@
                 <th id="usernameCol"><a href="#">Имя пользователя</a></th>
                 <th id="emailCol"><a href="#">E-mail</a></th>
                 <th id="textCol">Текст задачи</th>
-                <th id="pictureCol">Картинка</th>
+                <!--<th id="pictureCol">Картинка</th>-->
                 <th id="statusCol"><a href="#">Статус</a></th>
             </tr>
         </table>
@@ -76,7 +76,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="form-group">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> 
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary" id="addButton">Add</button>
                             </div>
                         </div>
@@ -127,6 +127,7 @@
                         </div>
                         <div class="modal-footer">
                             <div class="form-group">
+                                <button type="button" class="btn btn-danger" id="removeButton">Удалить</button>
                                 <button type="button" id="closeEditModal" class="btn btn-default" data-dismiss="modal">Не сохранять</button>
                                 <button type="submit" class="btn btn-primary" id="editButton">Сохранить</button>
                             </div>

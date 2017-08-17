@@ -94,22 +94,29 @@ function addPostRow(post)
     //Prepare status to human view
     let statusHuman = statusToHuman(post.status);
 
+    //Create image tag, use timestamp for no caching
+    if (post.image) {
+        imageTag = "<img src='/upload/" + post.id + ".png?timestamp=" + Date.now() + "' alt=''>";
+    } else {
+        imageTag = "-";
+    }
+
     //Create inside divs
     let $tr = $("<tr class='table-line' id='" + post_id + "' onclick='editPost(" + post.id + ");return false;'></tr>");
     let $td1 = $("<td class='postUsername'>" + post.username + "</td>");
     let $td2 = $("<td class='postEmail'>" + post.email + "</td>");
     let $td3 = $("<td class='postText'>" + post.text + "</td>");
-    let $td4 = $("<td><img src='#' alt=''></a></td>");
+    //let $td4 = $("<td class='postImage'>" + imageTag + "</td>");
     let $td5 = $("<td class='postStatus'>" + statusHuman + "</span></td>");
-    let $td6 = "<td><a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id + ");return false;'></a></td>";
-    
+    //let $td6 = "<td><a class='glyphicon glyphicon-remove-sign remove-post' href='#' onclick='removePost(" + post.id + ");return false;'></a></td>";
+
     //Structure divs
     $tr.append($td1);
     $tr.append($td2);
     $tr.append($td3);
-    $tr.append($td4);
+    //$tr.append($td4);
     $tr.append($td5);
-    $tr.append($td6);
+    //$tr.append($td6);
 
     //Attach ready media to container
     $('#tableHeader').after($tr);
@@ -117,7 +124,7 @@ function addPostRow(post)
 
 function removePost(id)
 {
-    if (!confirm("Are you sure to remove post with id " + id + "? This action can not be undone!")) {
+    if (!confirm("Вы уверены, что хотите удалить задачу? Данное действие не может быть отменено!")) {
         return false;
     }
     $.ajax({
@@ -133,12 +140,19 @@ function removePost(id)
         success : function(data) {
             if (data.result == 'success') {
                 $('#post-id_' + id).remove();
+                $('#editPostModal').modal('hide');
             }
         }
     });
 }
 
-//Open modal handler
+//Build a post modal
+function buildPost(post)
+{
+
+}
+
+//Edit post modal handler
 function editPost(post_id)
 {
     $.ajax({
@@ -165,6 +179,11 @@ function editPost(post_id)
                 $('#editPostModal #inputEmail').val(post.email);
                 $('#editPostModal #inputText').val(post.text);
 
+                //Clean remove post button event handler and create new one
+                $("#removeButton").off();
+                $("#removeButton").click(function() {
+                    removePost(post_id);
+                });
 
                 if (post.image === true) {
                     $img = $("<img id='preview'>");
@@ -361,6 +380,9 @@ function loadPosts(colName, sortDirection) {
 
                 //Take posts got from server
                 posts = data.posts;
+
+                console.log("Posts: ");
+                console.log(posts);
 
                 //If we change sort column then first sort direction is always asc
                 if (window.prevSortColumn !== colName) {

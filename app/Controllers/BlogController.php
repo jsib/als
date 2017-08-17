@@ -7,7 +7,7 @@ use Core\Facades\Auth;
 
 class BlogController extends Controller
 {
-    public function listPostsAction()
+    public function mainPageAction()
     {
         $posts_res = DB::prepare(
             'SELECT * FROM `posts`
@@ -31,6 +31,16 @@ class BlogController extends Controller
             ->getResult();
         
         $posts = $posts_res->fetchAll();
+
+        //Add images information to array
+        foreach ($posts as $el_id => $post) {
+            $post_id = $post['id'];
+            if (file_exists(UPLOAD_PATH . $post_id . ".png")) {
+                $posts[$el_id]['image'] = true;
+            } else {
+                $posts[$el_id]['image'] = false;
+            }
+        }
         
         return $this->sendJson(['result' => 'success', 'posts' => $posts]);
     }
